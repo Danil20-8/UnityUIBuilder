@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEngine;
 using MyLib.Algoriphms;
 
-namespace UnityUIBuilder.Default.Attributes
+namespace UnityUIBuilder.Standard.Attributes
 {
     /// <summary>
     /// Loads prefabs and sets to property

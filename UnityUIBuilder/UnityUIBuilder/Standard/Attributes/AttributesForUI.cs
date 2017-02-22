@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using System.Reflection;
 
-namespace UnityUIBuilder.Default.Attributes
+namespace UnityUIBuilder.Standard.Attributes
 {
     public class AttributesForUI<TAppData, TModuleData, TElementData> : VAttributeHandler<TAppData, TModuleData, TElementData>
         where TModuleData : IModuleVersionData

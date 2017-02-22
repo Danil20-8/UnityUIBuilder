@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MyLib.Parsing.XML;
 
-namespace UnityUIBuilder.Default.States
+namespace UnityUIBuilder.Standard.States
 {
     public abstract class State<TAppData, TModelData, TElementData> : IXMLElement
     {

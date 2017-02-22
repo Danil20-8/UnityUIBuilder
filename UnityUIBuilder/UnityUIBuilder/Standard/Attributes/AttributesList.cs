@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace UnityUIBuilder.Default.Attributes
+namespace UnityUIBuilder.Standard.Attributes
 {
     public class AttributesList<TAppData, TModuleData, TElementData> : VAttributeHandler<TAppData, TModuleData, TElementData>
         where TModuleData : IModuleVersionData

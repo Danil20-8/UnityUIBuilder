@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using MyLib.Algoriphms;
 
-namespace UnityUIBuilder.Default.Attributes
+namespace UnityUIBuilder.Standard.Attributes
 {
     /// <summary>
     /// Sets built-in property types

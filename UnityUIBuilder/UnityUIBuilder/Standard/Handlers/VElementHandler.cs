@@ -5,7 +5,7 @@ using System.Text;
 using System.Reflection;
 using MyLib.Parsing.XML;
 
-namespace UnityUIBuilder.Default.Handlers
+namespace UnityUIBuilder.Standard.Handlers
 {
     public abstract class VElementHandler<TAppData, TModuleData, TElementData> : IAddElementHandler<TAppData, TModuleData, TElementData>
         where TModuleData : IModuleVersionData

@@ -5,7 +5,7 @@ using System.Text;
 using MyLib.Parsing.XML;
 using UnityEngine;
 
-namespace UnityUIBuilder.Default.States
+namespace UnityUIBuilder.Standard.States
 {
     public class ControllerState<TAppData, TModelData, TElementData> : State<TAppData, TModelData, TElementData>, IXMLElement
         where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>

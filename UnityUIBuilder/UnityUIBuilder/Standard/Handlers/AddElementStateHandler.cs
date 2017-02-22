@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using MyLib.Parsing.XML;
 using UnityEngine;
-using UnityUIBuilder.Default.States;
+using UnityUIBuilder.Standard.States;
 
-namespace UnityUIBuilder.Default.Handlers
+namespace UnityUIBuilder.Standard.Handlers
 {
-    public class AddElementState<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>
+    public class AddElementFromConst<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>
         where TModuleData : IModuleVersionData
         where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>
     {

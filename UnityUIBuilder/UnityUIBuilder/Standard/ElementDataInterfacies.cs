@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace UnityUIBuilder.Default
+namespace UnityUIBuilder.Standard
 {
-    public interface IDefaultElementData<TData> : IControllerData, ITransformData, IGameObjectData, ICreateChildData<TData>, ICloneData<TData>
+    public interface IStandardElementData<TData> : IControllerData, ITransformData, IGameObjectData, ICreateChildData<TData>, ICloneData<TData>
     {
     }
 

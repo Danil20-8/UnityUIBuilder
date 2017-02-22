@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityUIBuilder.Default;
-using UnityUIBuilder.Default.Handlers;
-using UnityUIBuilder.Default.Attributes;
+using UnityUIBuilder.Standard;
+using UnityUIBuilder.Standard.Handlers;
+using UnityUIBuilder.Standard.Attributes;
 
 namespace UnityUIBuilder
 {
@@ -88,7 +88,7 @@ namespace UnityUIBuilder
         public XMLApplication()
             :base(new AppData(),
                     new AddElementHandlerList<AppData, ModuleData, ElementData>(
-                        new AddElementState<AppData, ModuleData, ElementData>(),
+                        new AddElementFromConst<AppData, ModuleData, ElementData>(),
                         new AddElementFromUnityRes<AppData, ModuleData, ElementData>(),
                         new AddElementFromAssemblies<AppData, ModuleData, ElementData>()
                         ),

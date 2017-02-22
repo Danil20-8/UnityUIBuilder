@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UnityUIBuilder.Default
+namespace UnityUIBuilder.Standard
 {
-    public interface IDefaultTModuleData<TModuleData> : IModuleVersionData, IDataImport<TModuleData>, IResFoldersData, INamespaceData, IClassData
+    public interface IStandardTModuleData<TModuleData> : IModuleVersionData, IDataImport<TModuleData>, IResFoldersData, INamespaceData, IClassData
     {
     }
 

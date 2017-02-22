@@ -7,7 +7,7 @@ using MyLib.Algoriphms;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace UnityUIBuilder.Default.Attributes
+namespace UnityUIBuilder.Standard.Attributes
 {
     public static class ValueSetter
     {

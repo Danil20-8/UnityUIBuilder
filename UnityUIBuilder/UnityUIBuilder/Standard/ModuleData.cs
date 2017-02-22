@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace UnityUIBuilder.Default
+namespace UnityUIBuilder.Standard
 {
-    public class ModuleData : IDefaultTModuleData<ModuleData>
+    public class ModuleData : IStandardTModuleData<ModuleData>
     {
         string version = Versions.std_last;
         readonly HashSet<string> namespaces = new HashSet<string>();

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace UnityUIBuilder.Default
+namespace UnityUIBuilder.Standard
 {
-    public class AppData : IDefaultAppData<AppData>
+    public class AppData : IStandardAppData<AppData>
     {
         readonly Dictionary<string, GameObject> idList = new Dictionary<string, GameObject>();
 

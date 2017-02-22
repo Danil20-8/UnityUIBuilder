@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace UnityUIBuilder.Default
+namespace UnityUIBuilder.Standard
 {
-    public class ElementData : IDefaultElementData<ElementData>
+    public class ElementData : IStandardElementData<ElementData>
     {
         MonoBehaviour controller;
         GameObject gameObject;

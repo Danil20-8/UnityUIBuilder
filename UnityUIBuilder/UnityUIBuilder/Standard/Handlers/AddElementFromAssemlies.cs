@@ -6,7 +6,7 @@ using MyLib.Parsing.XML;
 using System.Reflection;
 using UnityEngine;
 using MyLib.Algoriphms;
-namespace UnityUIBuilder.Default.Handlers
+namespace UnityUIBuilder.Standard.Handlers
 {
     public class AddElementFromAssemblies<TAppData, TModelData, TElementData> : VElementHandler<TAppData, TModelData, TElementData>
         where TModelData : INamespaceData, IModuleVersionData

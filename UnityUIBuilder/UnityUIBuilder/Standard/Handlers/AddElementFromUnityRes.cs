@@ -5,7 +5,7 @@ using System.Text;
 using MyLib.Parsing.XML;
 using UnityEngine;
 
-namespace UnityUIBuilder.Default.Handlers
+namespace UnityUIBuilder.Standard.Handlers
 {
     /// <summary>
     /// Loads, instantiates and adds prefab as element

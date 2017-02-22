@@ -5,7 +5,7 @@ using System.Text;
 using System.Reflection;
 using UnityEngine;
 
-namespace UnityUIBuilder.Default.Attributes
+namespace UnityUIBuilder.Standard.Attributes
 {
     public class ConstStatementAttribute<TAppData, TModelData, TElementData> : VAttributeHandler<TAppData, TModelData, TElementData>
         where TModelData : IClassData, IModuleVersionData

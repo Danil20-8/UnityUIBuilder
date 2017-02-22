@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MyLib.Parsing.XML;
 
-namespace UnityUIBuilder.Default.States
+namespace UnityUIBuilder.Standard.States
 {
     class UsingState<TAppData, TModelData, TElementData> : State<TAppData, TModelData, TElementData> where TModelData : INamespaceData, IResFoldersData
     {
