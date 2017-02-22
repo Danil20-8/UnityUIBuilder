@@ -11,9 +11,11 @@ namespace UnityUIBuilder.Default.Handlers
     /// Loads, instantiates and adds prefab as element
     /// </summary>
     /// <typeparam name="TModelData"></typeparam>
-    public class AddElementFromUnityRes<TAppData, TModelData> : IAddElementHandler<TAppData, TModelData> where TModelData: IResFoldersData
+    public class AddElementFromUnityRes<TAppData, TModelData, TElementData> : IAddElementHandler<TAppData, TModelData, TElementData>
+        where TModelData: IResFoldersData
+        where TElementData : ICreateChildData<TElementData>
     {
-        public IXMLElement AddElement(string name, Transform parent, MonoBehaviour controller, XMLModule<TAppData, TModelData>.External provider)
+        public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
         {
             UnityEngine.Object prefab = null;
             foreach (var folder in provider.data.GetResFolders())
@@ -21,9 +23,8 @@ namespace UnityUIBuilder.Default.Handlers
                 prefab = Resources.Load(string.Join("/", new string[] { folder, name }));
                 if (prefab != null)
                     return provider.AddElement(name,
-                        GameObject.Instantiate((prefab as GameObject)),
-                        parent,
-                        controller
+                        previewData.CreateChild(GameObject.Instantiate((prefab as GameObject))),
+                        previewData
                         );
             }
             return null;

@@ -6,10 +6,12 @@ using MyLib.Parsing.XML;
 
 namespace UnityUIBuilder.Default.States
 {
-    public class IncludeState<TAppData, TModelData> : State<TAppData, TModelData> where TModelData : IDataImport<TModelData>
+    public class IncludeState<TAppData, TModelData, TElementData> : State<TAppData, TModelData, TElementData>
+        where TModelData : IDataImport<TModelData>
+        where TElementData : ITransformData
     {
-        public IncludeState(XMLModule<TAppData, TModelData>.Internal module) : this("include", module) { }
-        public IncludeState(string name, XMLModule<TAppData, TModelData>.Internal module) : base(name, module) { }
+        public IncludeState(XMLModule<TAppData, TModelData, TElementData>.Internal module) : this("include", module) { }
+        public IncludeState(string name, XMLModule<TAppData, TModelData, TElementData>.Internal module) : base(name, module) { }
 
         public override void AddAttribute(string name, string value)
         {
@@ -36,9 +38,9 @@ namespace UnityUIBuilder.Default.States
 
         void IncludeXML(string name)
         {
-            var m = module.app.Perform(name, module.transform);
+            var m = module.app.Perform(name, module.rootData);
 
-            module.data.ImporData(m.data);
+            module.data.ImportData(m.data);
         }
     }
 }

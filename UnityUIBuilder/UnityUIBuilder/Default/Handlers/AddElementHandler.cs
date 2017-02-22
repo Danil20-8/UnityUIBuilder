@@ -7,24 +7,25 @@ using MyLib.Parsing.XML;
 
 namespace UnityUIBuilder.Default.Handlers
 {
-    public class AddElementHandlerList<TAppData, TModelData> : IAddElementHandler<TAppData, TModelData>
+    public class AddElementHandlerList<TAppData, TModelData, TElementData> : IAddElementHandler<TAppData, TModelData, TElementData>
+        where TElementData : ICreateChildData<TElementData>
     {
-        IAddElementHandler<TAppData, TModelData>[] handlers;
+        IAddElementHandler<TAppData, TModelData, TElementData>[] handlers;
 
-        public AddElementHandlerList(params IAddElementHandler<TAppData, TModelData>[] handlers)
+        public AddElementHandlerList(params IAddElementHandler<TAppData, TModelData, TElementData>[] handlers)
         {
             this.handlers = handlers;
         }
 
-        public IXMLElement AddElement(string name, Transform parent, MonoBehaviour controller, XMLModule<TAppData, TModelData>.External provider)
+        public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
         {
             foreach(var h in handlers)
             {
-                var result = h.AddElement(name, parent, controller, provider);
+                var result = h.AddElement(name, previewData, provider);
                 if (result != null) return result;
             }
 
-            return provider.AddElement(name, new GameObject(name), parent, controller);
+            return provider.AddElement(name, previewData.CreateChild(name), previewData);
         }
     }
 }

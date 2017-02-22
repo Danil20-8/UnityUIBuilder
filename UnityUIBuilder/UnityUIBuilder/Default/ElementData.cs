@@ -11,19 +11,71 @@ namespace UnityUIBuilder.Default
         MonoBehaviour controller;
         GameObject gameObject;
 
+        public ElementData(GameObject gameObject)
+        {
+            this.gameObject = gameObject;
+        }
+
+        public ElementData CreateChild(string name)
+        {
+            return CreateChild(new GameObject(name));
+        }
+
+        public ElementData CreateChild(GameObject gameObject)
+        {
+            ResetGameObject(gameObject);
+
+            return new ElementData(gameObject)
+            {
+                controller = controller
+            };
+
+        }
+
+        protected virtual void ResetGameObject(GameObject gameObject)
+        {
+            RectTransform rt = gameObject.GetComponent<RectTransform>();
+            if (rt == null)
+                rt = gameObject.AddComponent<RectTransform>();
+
+            rt.SetParent(this.gameObject.transform);
+
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.zero;
+            rt.anchoredPosition = Vector3.zero;
+        }
+
         public MonoBehaviour GetController()
         {
             return controller;
         }
 
-        public void ImporData(ElementData sourceData)
+        public GameObject GetGameObject()
         {
-            controller = sourceData.controller;
+            return gameObject;
+        }
+
+        public Transform GetTransform()
+        {
+            return gameObject.transform;
         }
 
         public void SetController(MonoBehaviour controller)
         {
             this.controller = controller;
+        }
+
+        public ElementData Clone()
+        {
+            return new ElementData(gameObject)
+            {
+                controller = controller
+            };
+        }
+
+        public static implicit operator ElementData(GameObject gameObject)
+        {
+            return new ElementData(gameObject);
         }
     }
 }

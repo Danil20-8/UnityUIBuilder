@@ -6,12 +6,12 @@ using MyLib.Parsing.XML;
 
 namespace UnityUIBuilder.Default.States
 {
-    public abstract class State<TAppData, TModelData> : IXMLElement
+    public abstract class State<TAppData, TModelData, TElementData> : IXMLElement
     {
         public string name { get; private set; }
-        protected XMLModule<TAppData, TModelData>.Internal module;
+        protected XMLModule<TAppData, TModelData, TElementData>.Internal module;
 
-        public State(string name, XMLModule<TAppData, TModelData>.Internal module) { this.name = name; this.module = module; }
+        public State(string name, XMLModule<TAppData, TModelData, TElementData>.Internal module) { this.name = name; this.module = module; }
 
         public abstract void AddAttribute(string name, string value);
 

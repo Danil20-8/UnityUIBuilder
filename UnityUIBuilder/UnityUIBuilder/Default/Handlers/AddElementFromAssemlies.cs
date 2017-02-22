@@ -8,12 +8,14 @@ using UnityEngine;
 using MyLib.Algoriphms;
 namespace UnityUIBuilder.Default.Handlers
 {
-    public class AddElementFromAssemlies<TAppData, TModelData> : IAddElementHandler<TAppData, TModelData> where TModelData : INamespaceData
+    public class AddElementFromAssemlies<TAppData, TModelData, TElementData> : IAddElementHandler<TAppData, TModelData, TElementData>
+        where TModelData : INamespaceData
+        where TElementData : ICreateChildData<TElementData>
     {
         Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
 
-        public IXMLElement AddElement(string name, Transform parent, MonoBehaviour controller, XMLModule<TAppData, TModelData>.External provider)
+        public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
         {
             var namespaces = provider.data.GetNamespaces();
 
@@ -27,7 +29,7 @@ namespace UnityUIBuilder.Default.Handlers
                             {
                                 var go = new GameObject(name);
                                 go.AddComponent(t);
-                                return provider.AddElement(name, go, parent, controller);
+                                return provider.AddElement(name, previewData.CreateChild(go), previewData);
                             }
                 }
             }

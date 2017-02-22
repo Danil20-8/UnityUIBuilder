@@ -11,23 +11,23 @@ using UnityUIBuilder.Default.Handlers;
 namespace UnityUIBuilder
 {
 
-    public class XMLModule<TAppData, TModelData> : IXMLModule
+    public class XMLModule<TAppData, TModelData, TElementData> : IXMLModule
     {
         public readonly TModelData data;
-        public readonly XMLApplication<TAppData, TModelData> app;
-        public readonly Transform transform;
+        public readonly XMLApplication<TAppData, TModelData, TElementData> app;
+        readonly TElementData rootData;
 
         readonly Internal _in;
 
-        public XMLModule(XMLApplication<TAppData, TModelData> app, Transform transform)
-            :this(app, transform, Activator.CreateInstance<TModelData>())
+        public XMLModule(XMLApplication<TAppData, TModelData, TElementData> app, TElementData rootData)
+            :this(app, rootData, Activator.CreateInstance<TModelData>())
         {
         }
-        public XMLModule(XMLApplication<TAppData, TModelData> app, Transform transform, TModelData data)
+        public XMLModule(XMLApplication<TAppData, TModelData, TElementData> app, TElementData rootData, TModelData data)
         {
             this.app = app;
             this.data = data;
-            this.transform = transform;
+            this.rootData = rootData;
 
             _in = new Internal(this);
         }
@@ -37,22 +37,9 @@ namespace UnityUIBuilder
             return _in.HandleElement(name);
         }
 
-        IXMLElement AddElement(string name, Transform parent, MonoBehaviour controller)
+        IXMLElement AddElement(string name, TElementData previewData)
         {
-            return _in.HandleElement(name, parent, controller);
-        }
-
-        protected virtual void HandleObject(GameObject gameObject, Transform parent)
-        {
-            RectTransform rt = gameObject.GetComponent<RectTransform>();
-            if (rt == null)
-                rt = gameObject.AddComponent<RectTransform>();
-
-            rt.SetParent(parent);
-
-            rt.anchorMin = Vector2.zero;
-            rt.anchorMax = Vector2.zero;
-            rt.anchoredPosition = Vector3.zero;
+            return _in.HandleElement(name, previewData);
         }
 
         public void Perform(IEnumerable<char> source)
@@ -63,21 +50,19 @@ namespace UnityUIBuilder
 
         public class External
         {
-            protected XMLModule<TAppData, TModelData> module;
+            protected XMLModule<TAppData, TModelData, TElementData> module;
 
-            public XMLApplication<TAppData, TModelData> app { get { return module.app; } }
+            public XMLApplication<TAppData, TModelData, TElementData> app { get { return module.app; } }
             public TModelData data { get { return module.data; } }
-            public Transform transform { get { return module.transform; } }
 
-            public External(XMLModule<TAppData, TModelData> module)
+            public External(XMLModule<TAppData, TModelData, TElementData> module)
             {
                 this.module = module;
             }
 
-            public IXMLElement AddElement(string name, GameObject gameObject, Transform parent, MonoBehaviour controller)
+            public IXMLElement AddElement(string name, TElementData elementData, TElementData previewData)
             {
-                module.HandleObject(gameObject, parent);
-                return new XMLElementUI<TAppData, TModelData>(name, gameObject, controller, module._in);
+                return new XMLElementUI<TAppData, TModelData, TElementData>(name, elementData, module._in);
             }
 
             public Internal GetInternal()
@@ -91,19 +76,21 @@ namespace UnityUIBuilder
         /// </summary>
         public class Internal: External
         {
-            public Internal(XMLModule<TAppData, TModelData> module) : base(module) { }
+            public TElementData rootData { get { return module.rootData; } }
+
+            public Internal(XMLModule<TAppData, TModelData, TElementData> module) : base(module) { }
 
             public IXMLElement HandleElement(string name)
             {
-                var result = app.rootAddElementHandler.AddElement(name, transform, null, this);
+                var result = app.rootAddElementHandler.AddElement(name, module.rootData, this);
                 if (result != null)
                     return result;
-                return HandleElement(name, transform, null);
+                return HandleElement(name, module.rootData);
             }
 
-            public IXMLElement HandleElement(string name, Transform parent, MonoBehaviour controller)
+            public IXMLElement HandleElement(string name, TElementData previewData)
             {
-                return app.addElementHandler.AddElement(name, parent, controller, this);
+                return app.addElementHandler.AddElement(name, previewData, this);
             }
 
         }

@@ -6,16 +6,16 @@ using UnityEngine;
 
 namespace UnityUIBuilder.Default.Attributes
 {
-    public class AttributesList<TAppData, TModelData> : IAddAttributeHandler<TAppData, TModelData>
+    public class AttributesList<TAppData, TModelData, TElementData> : IAddAttributeHandler<TAppData, TModelData, TElementData>
     {
-        IAddAttributeHandler<TAppData, TModelData>[] handlers;
+        IAddAttributeHandler<TAppData, TModelData, TElementData>[] handlers;
 
-        public AttributesList(params IAddAttributeHandler<TAppData, TModelData>[] handlers )
+        public AttributesList(params IAddAttributeHandler<TAppData, TModelData, TElementData>[] handlers )
         {
             this.handlers = handlers;
         }
 
-        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData> element)
+        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element)
         {
             foreach (var h in handlers)
                 if (h.AddAttribute(attributeName, attributeValue, element))

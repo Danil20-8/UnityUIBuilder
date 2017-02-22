@@ -80,7 +80,7 @@ namespace UnityUIBuilder.Default
             return classes.Select(p => new Class { name = p.Key, attributes = p.Value });
         }
 
-        public void ImporData(ModuleData sourceData)
+        public void ImportData(ModuleData sourceData)
         {
             foreach (var n in sourceData.namespaces)
                 namespaces.Add(n);

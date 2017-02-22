@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace UnityUIBuilder.Default
 {
-    public interface IDefaultElementData<TData> : IControllerData, IDataImport<TData>
+    public interface IDefaultElementData<TData> : IControllerData, ITransformData, IGameObjectData, ICreateChildData<TData>, ICloneData<TData>
     {
     }
 
@@ -14,5 +14,30 @@ namespace UnityUIBuilder.Default
     {
         MonoBehaviour GetController();
         void SetController(MonoBehaviour controller);
+    }
+
+    public interface ITransformData
+    {
+        Transform GetTransform();
+    }
+    public interface IGameObjectData
+    {
+        GameObject GetGameObject();
+    }
+    public interface ICreateChildData<TData>
+    {
+        TData CreateChild(string name);
+        TData CreateChild(GameObject gameObject);
+    }
+    public interface ICloneData<TData>
+    {
+        TData Clone();
+    }
+}
+namespace UnityUIBuilder
+{
+    public interface ISetPreviewable<TData>
+    {
+        void SetPreview(TData data);
     }
 }

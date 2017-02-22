@@ -6,10 +6,10 @@ using MyLib.Parsing.XML;
 
 namespace UnityUIBuilder.Default.States
 {
-    class UsingState<TAppData, TModelData> : State<TAppData, TModelData> where TModelData : INamespaceData, IResFoldersData
+    class UsingState<TAppData, TModelData, TElementData> : State<TAppData, TModelData, TElementData> where TModelData : INamespaceData, IResFoldersData
     {
-        public UsingState(XMLModule<TAppData, TModelData>.Internal module) : this("using", module) { }
-        public UsingState(string name, XMLModule<TAppData, TModelData>.Internal module) : base(name, module) { }
+        public UsingState(XMLModule<TAppData, TModelData, TElementData>.Internal module) : this("using", module) { }
+        public UsingState(string name, XMLModule<TAppData, TModelData, TElementData>.Internal module) : base(name, module) { }
 
         public override void AddAttribute(string name, string value)
         {

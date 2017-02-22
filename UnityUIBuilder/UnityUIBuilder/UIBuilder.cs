@@ -20,7 +20,7 @@ public class UIBuilder : MonoBehaviour
         while (transform.childCount != 0)
             DestroyImmediate(transform.GetChild(0).gameObject);
 
-        new XMLApplication().Perform(uiName, transform);
+        new XMLApplication().Perform(uiName, gameObject);
     }
 }
 

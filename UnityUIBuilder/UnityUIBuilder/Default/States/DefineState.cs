@@ -6,9 +6,9 @@ using MyLib.Parsing.XML;
 
 namespace UnityUIBuilder.Default.States
 {
-    public class DefineState<TAppData, TModelData> : State<TAppData, TModelData> where TModelData : IClassData
+    public class DefineState<TAppData, TModelData, TElementData> : State<TAppData, TModelData, TElementData> where TModelData : IClassData
     {
-        public DefineState(XMLModule<TAppData, TModelData>.Internal module) : base("define", module) { }
+        public DefineState(XMLModule<TAppData, TModelData, TElementData>.Internal module) : base("define", module) { }
 
         public override void AddAttribute(string name, string value)
         {
@@ -24,9 +24,9 @@ namespace UnityUIBuilder.Default.States
         {
         }
 
-        class DefineHelper : State<TAppData, TModelData>
+        class DefineHelper : State<TAppData, TModelData, TElementData>
         {
-            public DefineHelper(string className, XMLModule<TAppData, TModelData>.Internal module) : base(className, module) { }
+            public DefineHelper(string className, XMLModule<TAppData, TModelData, TElementData>.Internal module) : base(className, module) { }
 
             public override void AddAttribute(string name, string value)
             {

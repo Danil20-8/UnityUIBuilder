@@ -7,7 +7,10 @@ using UnityEngine;
 
 namespace UnityUIBuilder.Default.Attributes
 {
-    public class ConstStatementAttribute<TAppData, TModelData> : IAddAttributeHandler<TAppData, TModelData> where TModelData : IClassData where TAppData : IIDData
+    public class ConstStatementAttribute<TAppData, TModelData, TElementData> : IAddAttributeHandler<TAppData, TModelData, TElementData>
+        where TModelData : IClassData
+        where TAppData : IIDData
+        where TElementData : IGameObjectData, IControllerData
     {
         /// <summary>
         /// Derives from class. You can define a class with using statement. Example : class="className".
@@ -22,7 +25,7 @@ namespace UnityUIBuilder.Default.Attributes
         /// </summary>
         public const string call_st = "call";
 
-        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData> element)
+        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element)
         {
             switch(attributeName)
             {
@@ -31,12 +34,15 @@ namespace UnityUIBuilder.Default.Attributes
                         element.AddAttribute(a.name, a.value);
                     return true;
                 case id_st:
-                    element.module.app.data.AddIDObject(attributeValue, element.gameObject);
+                    element.module.app.data.AddIDObject(attributeValue, element.data.GetGameObject());
                     return true;
                 case call_st:
-                    var m = element.controller.GetType().GetMethod(attributeValue, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new Type[] { typeof(GameObject) }, null);
-                    if (m != null) m.Invoke(element.controller, new object[] { element.gameObject });
-                    else element.module.app.PushError(element.controller + " has no a method name " + attributeValue);
+                    var controller = element.data.GetController();
+                    var gameObject = element.data.GetGameObject();
+
+                    var m = controller.GetType().GetMethod(attributeValue, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new Type[] { typeof(GameObject) }, null);
+                    if (m != null) m.Invoke(controller, new object[] { gameObject });
+                    else element.module.app.PushError(controller + " has no a method name " + attributeValue);
                     return true;
                 default:
                     return false;

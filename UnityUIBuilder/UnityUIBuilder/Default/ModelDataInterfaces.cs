@@ -11,7 +11,7 @@ namespace UnityUIBuilder.Default
 
     public interface IDataImport<TModelData>
     {
-        void ImporData(TModelData sourceData);
+        void ImportData(TModelData sourceData);
     }
 
     public interface IResFoldersData

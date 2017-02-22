@@ -12,11 +12,13 @@ namespace UnityUIBuilder.Default.Attributes
     /// Loads prefabs and sets to property
     /// </summary>
     /// <typeparam name="TModelData"></typeparam>
-    public class SetPropertyFromUnityRes<TAppData, TModelData> : IAddAttributeHandler<TAppData, TModelData> where TModelData : IResFoldersData
+    public class SetPropertyFromUnityRes<TAppData, TModelData, TElementData> : IAddAttributeHandler<TAppData, TModelData, TElementData>
+        where TModelData : IResFoldersData
+        where TElementData : IGameObjectData
     {
-        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData> element)
+        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element)
         {
-            foreach (var com in element.gameObject.GetComponentsInChildren<Component>())
+            foreach (var com in element.data.GetGameObject().GetComponentsInChildren<Component>())
             {
                 var p = com.GetType().GetProperty(attributeName, BindingFlags.Instance | BindingFlags.Public);
                 if (p == null)

@@ -7,37 +7,41 @@ using UnityEngine;
 
 namespace UnityUIBuilder.Default.States
 {
-    public class ControllerState<TAppData, TModelData> : State<TAppData, TModelData>, IXMLElement
+    public class ControllerState<TAppData, TModelData, TElementData> : State<TAppData, TModelData, TElementData>, IXMLElement
+        where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>
     {
-        Transform transform;
-        MonoBehaviour controller;
+        TElementData data;
 
-        public ControllerState(Transform transform, XMLModule<TAppData, TModelData>.Internal module)
-            :this("controller", transform, module)
+        public ControllerState(TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.Internal module)
+            :this("controller", previewData, module)
         {
         }
 
-        public ControllerState(string name, Transform transform, XMLModule<TAppData, TModelData>.Internal module)
+        public ControllerState(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.Internal module)
             :base(name, module)
         {
-            this.transform = transform;
+            data = previewData.Clone();
         }
 
         public override void AddAttribute(string name, string value)
         {
             if(name=="name")
             {
-                this.controller = transform.GetComponentsInParent<MonoBehaviour>(true)
+                var controller = data.GetGameObject().GetComponentsInParent<MonoBehaviour>(true)
                     .FirstOrDefault(b => b.GetType().Name == value);
-                if (this.controller == null)
+                if (controller == null)
                     module.app.PushError("controller: " + name + " is not found");
+                else
+                {
+                    data.SetController(controller);
+                }
             }
         }
 
         public override IXMLElement AddElement(string name)
         {
-            if (controller == null) module.app.PushError("controller requiers name=\"controllerName\" attribute");
-            return module.HandleElement(name, transform, controller);
+            if (data.GetController() == null) module.app.PushError("controller requiers name=\"controllerName\" attribute");
+            return module.HandleElement(name, data);
         }
 
         public override void SetValue(string value)

@@ -13,11 +13,12 @@ namespace UnityUIBuilder.Default.Attributes
     /// Sets built-in property types
     /// </summary>
     /// <typeparam name="TModelData"></typeparam>
-    public class SetPropertyAttribute<TAppData, TModelData> : IAddAttributeHandler<TAppData, TModelData>
+    public class SetPropertyAttribute<TAppData, TModelData, TElementData> : IAddAttributeHandler<TAppData, TModelData, TElementData>
+        where TElementData : IGameObjectData, IControllerData
     {
-        public bool AddAttribute(string attributeName, string value, XMLElementUI<TAppData, TModelData> element)
+        public bool AddAttribute(string attributeName, string value, XMLElementUI<TAppData, TModelData, TElementData> element)
         {
-            foreach (var go in element.gameObject.GetComponentsInChildren<Component>())
+            foreach (var go in element.data.GetGameObject().GetComponentsInChildren<Component>())
             {
                 var p = go.GetType().GetProperty(attributeName, BindingFlags.Instance | BindingFlags.Public);
                 if (p == null)

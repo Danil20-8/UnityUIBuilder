@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace UnityUIBuilder
 {
-    public interface IAddElementHandler<TAppData, TModelData>
+    public interface IAddElementHandler<TAppData, TModelData, TElementData>
     {
-        IXMLElement AddElement(string name, Transform parent, MonoBehaviour controller, XMLModule<TAppData, TModelData>.External provider);
+        IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider);
     }
 }

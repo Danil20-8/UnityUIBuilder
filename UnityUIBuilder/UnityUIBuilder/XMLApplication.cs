@@ -9,25 +9,25 @@ using UnityUIBuilder.Default.Attributes;
 
 namespace UnityUIBuilder
 {
-    public class XMLApplication<TAppData, TModelData>
+    public class XMLApplication<TAppData, TModelData, TElementData>
     {
         public readonly TAppData data;
 
-        public readonly IAddElementHandler<TAppData, TModelData> addElementHandler;
-        public readonly IAddElementHandler<TAppData, TModelData> rootAddElementHandler;
+        public readonly IAddElementHandler<TAppData, TModelData, TElementData> addElementHandler;
+        public readonly IAddElementHandler<TAppData, TModelData, TElementData> rootAddElementHandler;
 
-        public readonly IAddAttributeHandler<TAppData, TModelData> addAttributeHandler;
+        public readonly IAddAttributeHandler<TAppData, TModelData, TElementData> addAttributeHandler;
 
-        public XMLApplication(IAddElementHandler<TAppData, TModelData> addElementHandler,
-            IAddElementHandler<TAppData, TModelData> rootAddElementHandler,
-            IAddAttributeHandler<TAppData, TModelData> addAttributeHandler)
+        public XMLApplication(IAddElementHandler<TAppData, TModelData, TElementData> addElementHandler,
+            IAddElementHandler<TAppData, TModelData, TElementData> rootAddElementHandler,
+            IAddAttributeHandler<TAppData, TModelData, TElementData> addAttributeHandler)
 
             : this(Activator.CreateInstance<TAppData>(), addElementHandler, rootAddElementHandler, addAttributeHandler)
         { }
 
-        public XMLApplication(TAppData data, IAddElementHandler<TAppData, TModelData> addElementHandler,
-            IAddElementHandler<TAppData, TModelData> rootAddElementHandler,
-            IAddAttributeHandler<TAppData, TModelData> addAttributeHandler)
+        public XMLApplication(TAppData data, IAddElementHandler<TAppData, TModelData, TElementData> addElementHandler,
+            IAddElementHandler<TAppData, TModelData, TElementData> rootAddElementHandler,
+            IAddAttributeHandler<TAppData, TModelData, TElementData> addAttributeHandler)
         {
             this.data = data;
             this.addElementHandler = addElementHandler;
@@ -35,21 +35,21 @@ namespace UnityUIBuilder
             this.addAttributeHandler = addAttributeHandler;
         }
 
-        public XMLModule<TAppData, TModelData> Perform(string moduleName, Transform transform)
+        public XMLModule<TAppData, TModelData, TElementData> Perform(string moduleName, TElementData rootData)
         {
             var source = Load(moduleName);
 
             if (source != null)
-                return Perform(moduleName, source, transform);
+                return Perform(moduleName, source, rootData);
             else {
                 PushError(moduleName + " is not found");
                 return null;
             }
         }
 
-        public XMLModule<TAppData, TModelData> Perform(string moduleName, IEnumerable<char> source, Transform transform)
+        public XMLModule<TAppData, TModelData, TElementData> Perform(string moduleName, IEnumerable<char> source, TElementData rootData)
         {
-            var module = new XMLModule<TAppData, TModelData>(this, transform);
+            var module = new XMLModule<TAppData, TModelData, TElementData>(this, rootData);
 
             module.Perform(source);
 
@@ -77,18 +77,9 @@ namespace UnityUIBuilder
         }
     }
 
-    public class XMLApplication<TModuleData> : XMLApplication<AppData, TModuleData>
+    public class XMLApplication : XMLApplication<AppData, ModuleData, ElementData>
     {
-        public XMLApplication(IAddElementHandler<AppData, TModuleData> addElementHandler, IAddElementHandler<AppData, TModuleData> rootAddElementHandler, IAddAttributeHandler<AppData, TModuleData> addAttributeHanedler)
-            : base(new AppData(), addElementHandler, rootAddElementHandler, addAttributeHanedler)
-        {
-
-        }
-    }
-
-    public class XMLApplication : XMLApplication<AppData, ModuleData>
-    {
-        public XMLApplication(IAddElementHandler<AppData, ModuleData> addElementHandler, IAddElementHandler<AppData, ModuleData> rootAddElementHandler, IAddAttributeHandler<AppData, ModuleData> addAttributeHanedler)
+        public XMLApplication(IAddElementHandler<AppData, ModuleData, ElementData> addElementHandler, IAddElementHandler<AppData, ModuleData, ElementData> rootAddElementHandler, IAddAttributeHandler<AppData, ModuleData, ElementData> addAttributeHanedler)
             : base(new AppData(), addElementHandler, rootAddElementHandler, addAttributeHanedler)
         {
 
@@ -96,17 +87,17 @@ namespace UnityUIBuilder
 
         public XMLApplication()
             :base(new AppData(),
-                    new AddElementHandlerList<AppData, ModuleData>(
-                        new AddElementState<AppData, ModuleData>(),
-                        new AddElementFromUnityRes<AppData, ModuleData>(),
-                        new AddElementFromAssemlies<AppData, ModuleData>()
+                    new AddElementHandlerList<AppData, ModuleData, ElementData>(
+                        new AddElementState<AppData, ModuleData, ElementData>(),
+                        new AddElementFromUnityRes<AppData, ModuleData, ElementData>(),
+                        new AddElementFromAssemlies<AppData, ModuleData, ElementData>()
                         ),
-                    new AddRootState<AppData, ModuleData>(),
-                    new AttributesList<AppData, ModuleData>(
-                        new AttributesForUI<AppData, ModuleData>(),
-                        new ConstStatementAttribute<AppData, ModuleData>(),
-                        new SetPropertyAttribute<AppData, ModuleData>(),
-                        new SetPropertyFromUnityRes<AppData, ModuleData>()
+                    new AddRootState<AppData, ModuleData, ElementData>(),
+                    new AttributesList<AppData, ModuleData, ElementData>(
+                        new AttributesForUI<AppData, ModuleData, ElementData>(),
+                        new ConstStatementAttribute<AppData, ModuleData, ElementData>(),
+                        new SetPropertyAttribute<AppData, ModuleData, ElementData>(),
+                        new SetPropertyFromUnityRes<AppData, ModuleData, ElementData>()
                         )
                     )
         {
