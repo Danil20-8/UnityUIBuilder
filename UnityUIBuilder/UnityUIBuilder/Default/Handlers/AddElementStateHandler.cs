@@ -8,15 +8,17 @@ using UnityUIBuilder.Default.States;
 
 namespace UnityUIBuilder.Default.Handlers
 {
-    public class AddElementState<TAppData, TModelData, TElementData> : IAddElementHandler<TAppData, TModelData, TElementData>
+    public class AddElementState<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>
+        where TModuleData : IModuleVersionData
         where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>
     {
-        public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
+        [Version(Versions.std_v_1_0, true)]
+        new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.External provider)
         {
             switch(name)
             {
                 case "controller":
-                    return new ControllerState<TAppData, TModelData, TElementData>(previewData, provider.GetInternal());
+                    return new ControllerState<TAppData, TModuleData, TElementData>(previewData, provider.GetInternal());
                 default:
                     return null;
             }

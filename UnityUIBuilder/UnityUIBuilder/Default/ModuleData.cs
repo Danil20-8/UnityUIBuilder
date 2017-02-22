@@ -6,8 +6,9 @@ using UnityEngine;
 
 namespace UnityUIBuilder.Default
 {
-    public class ModuleData : IDefaultTModelData<ModuleData>
+    public class ModuleData : IDefaultTModuleData<ModuleData>
     {
+        string version = Versions.std_last;
         readonly HashSet<string> namespaces = new HashSet<string>();
         readonly HashSet<string> resFolders = new HashSet<string>();
         readonly Dictionary<string, List<ClassAttribute>> classes = new Dictionary<string, List<ClassAttribute>>();
@@ -91,6 +92,16 @@ namespace UnityUIBuilder.Default
             foreach (var c in sourceData.classes)
                 if (!classes.ContainsKey(c.Key))
                     classes.Add(c.Key, c.Value.ToList());
+        }
+
+        public void SetVersion(string version)
+        {
+            this.version = version;
+        }
+
+        public string GetVersion()
+        {
+            return version;
         }
     }
 }

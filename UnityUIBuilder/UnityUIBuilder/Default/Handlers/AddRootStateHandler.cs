@@ -8,20 +8,21 @@ using UnityUIBuilder.Default.States;
 
 namespace UnityUIBuilder.Default.Handlers
 {
-    public class AddRootState<TAppData, TModelData, TElementData> : IAddElementHandler<TAppData, TModelData, TElementData>
-        where TModelData : IDataImport<TModelData>, INamespaceData, IClassData, IResFoldersData
+    public class AddRootState<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>
+        where TModuleData : IDataImport<TModuleData>, INamespaceData, IClassData, IResFoldersData, IModuleVersionData
         where TElementData : ITransformData
     {
-        public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External module)
+        [Version(Versions.std_v_1_0, true)]
+        new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.External module)
         {
             switch(name)
             {
                 case "using":
-                    return new UsingState<TAppData, TModelData, TElementData>(module.GetInternal());
+                    return new UsingState<TAppData, TModuleData, TElementData>(module.GetInternal());
                 case "include":
-                    return new IncludeState<TAppData, TModelData, TElementData>(module.GetInternal());
+                    return new IncludeState<TAppData, TModuleData, TElementData>(module.GetInternal());
                 case "define":
-                    return new DefineState<TAppData, TModelData, TElementData>(module.GetInternal());
+                    return new DefineState<TAppData, TModuleData, TElementData>(module.GetInternal());
                 default:
                     return module.GetInternal().HandleElement(name, previewData);
             }

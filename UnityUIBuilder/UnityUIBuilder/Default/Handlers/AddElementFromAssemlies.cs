@@ -8,14 +8,14 @@ using UnityEngine;
 using MyLib.Algoriphms;
 namespace UnityUIBuilder.Default.Handlers
 {
-    public class AddElementFromAssemlies<TAppData, TModelData, TElementData> : IAddElementHandler<TAppData, TModelData, TElementData>
-        where TModelData : INamespaceData
+    public class AddElementFromAssemlies<TAppData, TModelData, TElementData> : VElementHandler<TAppData, TModelData, TElementData>
+        where TModelData : INamespaceData, IModuleVersionData
         where TElementData : ICreateChildData<TElementData>
     {
         Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-
-        public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
+        [Version(Versions.std_v_1_0, true)]
+        new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
         {
             var namespaces = provider.data.GetNamespaces();
 

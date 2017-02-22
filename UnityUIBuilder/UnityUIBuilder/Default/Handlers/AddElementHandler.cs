@@ -7,17 +7,19 @@ using MyLib.Parsing.XML;
 
 namespace UnityUIBuilder.Default.Handlers
 {
-    public class AddElementHandlerList<TAppData, TModelData, TElementData> : IAddElementHandler<TAppData, TModelData, TElementData>
+    public class AddElementHandlerList<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>
+        where TModuleData : IModuleVersionData 
         where TElementData : ICreateChildData<TElementData>
     {
-        IAddElementHandler<TAppData, TModelData, TElementData>[] handlers;
+        IAddElementHandler<TAppData, TModuleData, TElementData>[] handlers;
 
-        public AddElementHandlerList(params IAddElementHandler<TAppData, TModelData, TElementData>[] handlers)
+        public AddElementHandlerList(params IAddElementHandler<TAppData, TModuleData, TElementData>[] handlers)
         {
             this.handlers = handlers;
         }
 
-        public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
+        [Version(Versions.std_v_1_0, true)]
+        new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.External provider)
         {
             foreach(var h in handlers)
             {

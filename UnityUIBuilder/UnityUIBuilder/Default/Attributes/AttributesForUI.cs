@@ -6,10 +6,12 @@ using UnityEngine;
 
 namespace UnityUIBuilder.Default.Attributes
 {
-    public class AttributesForUI<TAppData, TModuleData, TElementData> : IAddAttributeHandler<TAppData, TModuleData, TElementData>
+    public class AttributesForUI<TAppData, TModuleData, TElementData> : VAttributeHandler<TAppData, TModuleData, TElementData>
+        where TModuleData : IModuleVersionData
         where TElementData : IGameObjectData
     {
-        public bool AddAttribute(string attributeName, string value, XMLElementUI<TAppData, TModuleData, TElementData> element)
+        [Version(Versions.std_v_1_0, true)]
+        new public bool AddAttribute(string attributeName, string value, XMLElementUI<TAppData, TModuleData, TElementData> element)
         {
             var rt = element.data.GetGameObject().GetComponent<RectTransform>();
             if (rt == null)

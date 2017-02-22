@@ -5,13 +5,19 @@ using System.Text;
 
 namespace UnityUIBuilder.Default
 {
-    public interface IDefaultTModelData<TModelData> : IDataImport<TModelData>, IResFoldersData, INamespaceData, IClassData
+    public interface IDefaultTModuleData<TModuleData> : IModuleVersionData, IDataImport<TModuleData>, IResFoldersData, INamespaceData, IClassData
     {
     }
 
-    public interface IDataImport<TModelData>
+    public interface IModuleVersionData
     {
-        void ImportData(TModelData sourceData);
+        void SetVersion(string verison);
+        string GetVersion();
+    }
+
+    public interface IDataImport<TModuleData>
+    {
+        void ImportData(TModuleData sourceData);
     }
 
     public interface IResFoldersData

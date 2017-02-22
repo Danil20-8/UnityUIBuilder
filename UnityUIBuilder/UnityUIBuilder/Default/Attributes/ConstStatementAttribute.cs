@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace UnityUIBuilder.Default.Attributes
 {
-    public class ConstStatementAttribute<TAppData, TModelData, TElementData> : IAddAttributeHandler<TAppData, TModelData, TElementData>
-        where TModelData : IClassData
+    public class ConstStatementAttribute<TAppData, TModelData, TElementData> : VAttributeHandler<TAppData, TModelData, TElementData>
+        where TModelData : IClassData, IModuleVersionData
         where TAppData : IIDData
         where TElementData : IGameObjectData, IControllerData
     {
@@ -25,7 +25,8 @@ namespace UnityUIBuilder.Default.Attributes
         /// </summary>
         public const string call_st = "call";
 
-        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element)
+        [Version(Versions.std_v_1_0, true)]
+        new public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element)
         {
             switch(attributeName)
             {
