@@ -1,12 +1,6 @@
-﻿using System;
+﻿using MyLib.Parsing.XML;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MyLib.Parsing.XML;
-using UnityEngine;
-using System.Reflection;
-using UnityUIBuilder.Default;
-using UnityUIBuilder.Default.Handlers;
 
 namespace UnityUIBuilder
 {

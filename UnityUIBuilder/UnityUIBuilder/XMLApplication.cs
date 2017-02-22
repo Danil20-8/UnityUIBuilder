@@ -90,7 +90,7 @@ namespace UnityUIBuilder
                     new AddElementHandlerList<AppData, ModuleData, ElementData>(
                         new AddElementState<AppData, ModuleData, ElementData>(),
                         new AddElementFromUnityRes<AppData, ModuleData, ElementData>(),
-                        new AddElementFromAssemlies<AppData, ModuleData, ElementData>()
+                        new AddElementFromAssemblies<AppData, ModuleData, ElementData>()
                         ),
                     new AddRootState<AppData, ModuleData, ElementData>(),
                     new AttributesList<AppData, ModuleData, ElementData>(

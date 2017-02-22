@@ -67,6 +67,7 @@
     <Compile Include="Default\Handlers\AddElementHandler.cs" />
     <Compile Include="Default\Handlers\AddElementStateHandler.cs" />
     <Compile Include="Default\States\DefineState.cs" />
+    <Compile Include="Default\States\VersionState.cs" />
     <Compile Include="Default\VersionAttribute.cs" />
     <Compile Include="FakeElement.cs" />
     <Compile Include="IAddElementHandler.cs" />

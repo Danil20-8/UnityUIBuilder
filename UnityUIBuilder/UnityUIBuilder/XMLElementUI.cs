@@ -1,13 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
-using MyLib.Parsing.XML;
-using MyLib.Algoriphms;
-using System;
-using System.Reflection;
-using UnityEngine.Events;
-using UnityUIBuilder.Default;
+﻿using MyLib.Parsing.XML;
 
 namespace UnityUIBuilder
 {

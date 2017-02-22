@@ -17,6 +17,8 @@ namespace UnityUIBuilder.Default.Handlers
         {
             switch(name)
             {
+                case "version":
+                    return new VersionState<TAppData, TModuleData, TElementData>(module.GetInternal());
                 case "using":
                     return new UsingState<TAppData, TModuleData, TElementData>(module.GetInternal());
                 case "include":

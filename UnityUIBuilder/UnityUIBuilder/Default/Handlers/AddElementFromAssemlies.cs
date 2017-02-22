@@ -8,7 +8,7 @@ using UnityEngine;
 using MyLib.Algoriphms;
 namespace UnityUIBuilder.Default.Handlers
 {
-    public class AddElementFromAssemlies<TAppData, TModelData, TElementData> : VElementHandler<TAppData, TModelData, TElementData>
+    public class AddElementFromAssemblies<TAppData, TModelData, TElementData> : VElementHandler<TAppData, TModelData, TElementData>
         where TModelData : INamespaceData, IModuleVersionData
         where TElementData : ICreateChildData<TElementData>
     {
