@@ -5,7 +5,7 @@ using System.Text;
 
 namespace UnityUIBuilder.Standard
 {
-    public interface IStandardTModuleData<TModuleData> : IModuleVersionData, IDataImport<TModuleData>, IResFoldersData, INamespaceData, IClassData
+    public interface IStandardTModuleData<TModuleData> : IModuleVersionData, IDataImport<TModuleData>, IResFoldersData, INamespaceData, IClassData, IIDData
     {
     }
 

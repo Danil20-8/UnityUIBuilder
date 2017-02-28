@@ -9,7 +9,7 @@ using UnityUIBuilder.Standard.States;
 namespace UnityUIBuilder.Standard.Handlers
 {
     public class AddElementFromConst<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>
-        where TModuleData : IModuleVersionData
+        where TModuleData : IModuleVersionData, IIDData, IResFoldersData, INamespaceData
         where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>
     {
         [Version(Versions.std_v_1_0, true)]
@@ -19,6 +19,8 @@ namespace UnityUIBuilder.Standard.Handlers
             {
                 case "controller":
                     return new ControllerState<TAppData, TModuleData, TElementData>(previewData, provider.GetInternal());
+                case "component":
+                    return new ComponentState<TAppData, TModuleData, TElementData>(previewData, provider.GetInternal());
                 default:
                     return null;
             }

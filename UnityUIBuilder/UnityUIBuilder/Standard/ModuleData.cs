@@ -12,10 +12,9 @@ namespace UnityUIBuilder.Standard
         readonly HashSet<string> namespaces = new HashSet<string>();
         readonly HashSet<string> resFolders = new HashSet<string>();
         readonly Dictionary<string, List<ClassAttribute>> classes = new Dictionary<string, List<ClassAttribute>>();
-
         readonly Dictionary<string, GameObject> idList = new Dictionary<string, GameObject>();
 
-        public void AddIDElement(string id, GameObject obj)
+        public void AddIDObject(string id, GameObject obj)
         {
             if (!idList.ContainsKey(id))
                 idList.Add(id, obj);
@@ -23,7 +22,7 @@ namespace UnityUIBuilder.Standard
                 throw new Exception(idList[id] + " already uses id: " + id + " set another id to " + obj);
         }
 
-        public GameObject GetByID(string id)
+        public GameObject GetObjectByID(string id)
         {
             GameObject result;
             if (idList.TryGetValue(id, out result))

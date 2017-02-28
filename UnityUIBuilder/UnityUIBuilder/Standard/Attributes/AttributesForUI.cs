@@ -38,6 +38,12 @@ namespace UnityUIBuilder.Standard.Attributes
                 case "height":
                     Height(rt, value);
                     return true;
+                case "side":
+                    Side(rt, value);
+                    return true;
+                case "anchor":
+                    Anchor(rt, value);
+                    return true;
             }
 
             return false;
@@ -171,16 +177,97 @@ namespace UnityUIBuilder.Standard.Attributes
 
         void Width(RectTransform transform, string value)
         {
-            var size = transform.sizeDelta;
-            size.x = GetValue(GetParentWidth(transform), value);
-            transform.sizeDelta = size;
+            if (transform.anchorMax.x == transform.anchorMin.x)
+            {
+                var size = transform.sizeDelta;
+                var pos = transform.anchoredPosition;
+                float t;
+                if (GetValue(value, out t))
+                {
+                    pos.x = t;
+                    transform.anchorMax += pos;
+                    size.x = 0;
+                    transform.sizeDelta = size;
+                }
+                else
+                {
+                    size.x = 0;
+                    transform.sizeDelta = size;
+                }
+            }
         }
 
         void Height(RectTransform transform, string value)
         {
-            var size = transform.sizeDelta;
-            size.y = GetValue(GetParentHeigth(transform), value);
-            transform.sizeDelta = size;
+            if (transform.anchorMax.y == transform.anchorMin.y)
+            {
+                var size = transform.sizeDelta;
+                var pos = transform.anchoredPosition;
+                float t;
+                if (GetValue(value, out t))
+                {
+                    pos.y = t;
+                    transform.anchorMax += pos;
+                    size.y = 0;
+                    transform.sizeDelta = size;
+                }
+                else
+                {
+                    size.y = 0;
+                    transform.sizeDelta = size;
+                }
+            }
+        }
+
+        void Side(RectTransform transform, string value)
+        {
+            if(transform.anchorMax == transform.anchorMin)
+            {
+                float size;
+                if(GetValue(value, out size))
+                {
+                    Vector2 result = new Vector2(size, size);
+
+                    var p = transform.parent as RectTransform;
+                    if(p != null)
+                    {
+                        if(p.rect.width > p.rect.height)
+                            result.x *= p.rect.height / p.rect.width;
+                        else if(p.rect.width < p.rect.height)
+                            result.y *= p.rect.width / p.rect.height;
+                    }
+
+                    transform.anchorMax += result;
+                    transform.sizeDelta = Vector2.zero;
+                }
+                else
+                    transform.sizeDelta = new Vector2(size, size);
+            }
+        }
+
+        void Anchor(RectTransform transform, string value)
+        {
+            var vals = value.Trim('(', ')').Split(',');
+            float xVal;
+            bool xIsRelative = GetValue(vals[0], out xVal);
+
+            float yVal;
+            bool yIsRelative = GetValue(vals[1], out yVal);
+
+            if(xIsRelative && yIsRelative)
+            {
+                transform.anchorMax = transform.anchorMin = new Vector2(xVal, yVal);
+            }
+            else if(xIsRelative)
+            {
+                transform.anchorMax = transform.anchorMin = new Vector2(xVal, 0);
+                transform.anchoredPosition = new Vector2(0, yVal);
+            }
+            else if(yIsRelative)
+            {
+                transform.anchorMax = transform.anchorMin = new Vector2(0, yVal);
+                transform.anchoredPosition = new Vector2(xVal, 0);
+            }
         }
     }
 }

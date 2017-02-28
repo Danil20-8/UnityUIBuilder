@@ -8,7 +8,7 @@ using UnityEngine;
 namespace UnityUIBuilder.Standard.Attributes
 {
     public class ConstStatementAttribute<TAppData, TModelData, TElementData> : VAttributeHandler<TAppData, TModelData, TElementData>
-        where TModelData : IClassData, IModuleVersionData
+        where TModelData : IClassData, IModuleVersionData, IIDData
         where TAppData : IIDData
         where TElementData : IGameObjectData, IControllerData
     {
@@ -20,6 +20,7 @@ namespace UnityUIBuilder.Standard.Attributes
         /// Adds to application id list. You can get gameObject of this element by id after perfoming ends. Example: id="myID".
         /// </summary>
         public const string id_st = "id";
+        public const string globalid_st = "globalID";
         /// <summary>
         /// Call a controller method with GameObject parameter. Example: call="SayHello".
         /// </summary>
@@ -34,8 +35,11 @@ namespace UnityUIBuilder.Standard.Attributes
                     foreach (var a in element.module.data.GetClassAttributes(attributeValue))
                         element.AddAttribute(a.name, a.value);
                     return true;
-                case id_st:
+                case globalid_st:
                     element.module.app.data.AddIDObject(attributeValue, element.data.GetGameObject());
+                    return true;
+                case id_st:
+                    element.module.data.AddIDObject(attributeValue, element.data.GetGameObject());
                     return true;
                 case call_st:
                     var controller = element.data.GetController();

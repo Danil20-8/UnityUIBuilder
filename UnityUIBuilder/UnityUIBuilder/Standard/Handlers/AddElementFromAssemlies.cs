@@ -12,27 +12,19 @@ namespace UnityUIBuilder.Standard.Handlers
         where TModelData : INamespaceData, IModuleVersionData
         where TElementData : ICreateChildData<TElementData>
     {
-        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
         [Version(Versions.std_v_1_0, true)]
         new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
         {
             var namespaces = provider.data.GetNamespaces();
 
-            foreach(var a in assemblies)
+            var componentType = ComponentGetter.GetFromAssemblies(name, namespaces);
+            if(componentType != null)
             {
-                foreach(var n in namespaces)
-                {
-                    foreach(var t in a.GetTypes())
-                        if(t.Name == name && t.Namespace == n)
-                            if(t.GetGeneration(typeof(Component)) != -1)
-                            {
-                                var go = new GameObject(name);
-                                go.AddComponent(t);
-                                return provider.AddElement(name, previewData.CreateChild(go), previewData);
-                            }
-                }
+                GameObject go = new GameObject(name);
+                go.AddComponent(componentType);
+                return provider.AddElement(name, previewData.CreateChild(go), previewData);
             }
+
             return null;
         }
     }
