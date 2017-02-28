@@ -54,7 +54,7 @@ namespace UnityUIBuilder
                 this.module = module;
             }
 
-            public IXMLElement AddElement(string name, TElementData elementData, TElementData previewData)
+            public IXMLElement AddElement(string name, TElementData elementData)
             {
                 return new XMLElementUI<TAppData, TModelData, TElementData>(name, elementData, module._in);
             }

@@ -27,7 +27,7 @@ namespace UnityUIBuilder.Standard.Handlers
                 if (result != null) return result;
             }
 
-            return provider.AddElement(name, previewData.CreateChild(name), previewData);
+            return provider.AddElement(name, previewData.CreateChild(name));
         }
     }
 }

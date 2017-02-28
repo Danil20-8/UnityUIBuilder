@@ -24,8 +24,7 @@ namespace UnityUIBuilder.Standard.Handlers
                 prefab = Resources.Load(string.Join("/", new string[] { folder, name }));
                 if (prefab != null)
                     return provider.AddElement(name,
-                        previewData.CreateChild(GameObject.Instantiate((prefab as GameObject))),
-                        previewData
+                        previewData.CreateChild(GameObject.Instantiate((prefab as GameObject)))
                         );
             }
             return null;

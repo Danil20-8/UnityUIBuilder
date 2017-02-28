@@ -22,7 +22,7 @@ namespace UnityUIBuilder.Standard.Handlers
             {
                 GameObject go = new GameObject(name);
                 go.AddComponent(componentType);
-                return provider.AddElement(name, previewData.CreateChild(go), previewData);
+                return provider.AddElement(name, previewData.CreateChild(go));
             }
 
             return null;

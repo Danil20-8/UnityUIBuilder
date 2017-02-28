@@ -18,6 +18,7 @@ namespace UnityUIBuilder.Standard.States
         public ComponentState(TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.Internal module)
             : base("component", module)
         {
+            this.previewData = previewData;
         }
 
         public override void AddAttribute(string name, string value)

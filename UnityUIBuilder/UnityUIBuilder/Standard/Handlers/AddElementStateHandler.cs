@@ -10,7 +10,7 @@ namespace UnityUIBuilder.Standard.Handlers
 {
     public class AddElementFromConst<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>
         where TModuleData : IModuleVersionData, IIDData, IResFoldersData, INamespaceData
-        where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>
+        where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>, ICreateChildData<TElementData>
     {
         [Version(Versions.std_v_1_0, true)]
         new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.External provider)
@@ -21,6 +21,8 @@ namespace UnityUIBuilder.Standard.Handlers
                     return new ControllerState<TAppData, TModuleData, TElementData>(previewData, provider.GetInternal());
                 case "component":
                     return new ComponentState<TAppData, TModuleData, TElementData>(previewData, provider.GetInternal());
+                case "void":
+                    return provider.AddElement(name, previewData.CreateChild(name));
                 default:
                     return null;
             }

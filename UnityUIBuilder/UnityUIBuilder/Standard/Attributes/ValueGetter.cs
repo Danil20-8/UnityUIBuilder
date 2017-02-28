@@ -37,6 +37,7 @@ namespace UnityUIBuilder.Standard.Attributes
 
             return Color.white;
         }
+
         public static UnityAction GetUnityAction(string value, MonoBehaviour controller)
         {
             var m = controller.GetType().GetMethod(value, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -71,6 +72,12 @@ namespace UnityUIBuilder.Standard.Attributes
                 var res = Resources.Load(f + "/" + value, resType);
                 if (res != null)
                     return res;
+            }
+            {
+                var res = Resources.Load(value, resType);
+                if (res != null)
+                    return res;
+                res = Resources.GetBuiltinResource(resType, value);
             }
             return null;
         }
