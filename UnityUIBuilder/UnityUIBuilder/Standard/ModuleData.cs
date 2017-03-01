@@ -13,11 +13,21 @@ namespace UnityUIBuilder.Standard
         readonly HashSet<string> resFolders = new HashSet<string>();
         readonly Dictionary<string, List<ClassAttribute>> classes = new Dictionary<string, List<ClassAttribute>>();
         readonly Dictionary<string, GameObject> idList = new Dictionary<string, GameObject>();
+        readonly Dictionary<string, List<Action<GameObject>>> idListeners = new Dictionary<string, List<Action<GameObject>>>();
 
         public void AddIDObject(string id, GameObject obj)
         {
             if (!idList.ContainsKey(id))
+            {
                 idList.Add(id, obj);
+                List<Action<GameObject>> listeners;
+                if(idListeners.TryGetValue(id, out listeners))
+                {
+                    foreach (var l in listeners)
+                        l(obj);
+                    idListeners.Remove(id);
+                }
+            }
             else
                 throw new Exception(idList[id] + " already uses id: " + id + " set another id to " + obj);
         }
@@ -91,6 +101,10 @@ namespace UnityUIBuilder.Standard
             foreach (var c in sourceData.classes)
                 if (!classes.ContainsKey(c.Key))
                     classes.Add(c.Key, c.Value.ToList());
+
+            foreach (var id in sourceData.idList)
+                if (!idList.ContainsKey(id.Key))
+                    idList.Add(id.Key, id.Value);
         }
 
         public void SetVersion(string version)
@@ -101,6 +115,27 @@ namespace UnityUIBuilder.Standard
         public string GetVersion()
         {
             return version;
+        }
+
+        public void WaitForID(string id, Action<GameObject> func)
+        {
+            GameObject gameObject;
+            if(idList.TryGetValue(id, out gameObject))
+            {
+                func(gameObject);
+            }
+            else
+            {
+                List<Action<GameObject>> listeners;
+                if(idListeners.TryGetValue(id, out listeners))
+                {
+                    listeners.Add(func);
+                }
+                else
+                {
+                    idListeners.Add(id, new List<Action<GameObject>>() { func });
+                }
+            }
         }
     }
 }

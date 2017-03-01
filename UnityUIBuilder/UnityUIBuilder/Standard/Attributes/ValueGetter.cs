@@ -81,5 +81,23 @@ namespace UnityUIBuilder.Standard.Attributes
             }
             return null;
         }
+        public static GameObject GetGameObject(string value, IIDData idData, IGameObjectData gameObjectData)
+        {
+            switch(value)
+            {
+                case "this":
+                    return gameObjectData.GetGameObject();
+                case "parent":
+                    var parent = gameObjectData.GetGameObject().transform.parent;
+                    return parent != null ? parent.gameObject : null;
+                default:
+                    return idData.GetObjectByID(value);
+            }
+        }
+        public static Component GetComponent(string value, Type componentType, IIDData idData, IGameObjectData gameObjectData)
+        {
+            var gameObject = GetGameObject(value, idData, gameObjectData);
+            return gameObject != null ? gameObject.GetComponentInParent(componentType) : null;
+        }
     }
 }

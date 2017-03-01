@@ -9,7 +9,7 @@ using UnityUIBuilder.Standard.Attributes;
 namespace UnityUIBuilder.Standard.States
 {
     public class ComponentState<TAppData, TModuleData, TElementData> : State<TAppData, TModuleData, TElementData>
-        where TModuleData: INamespaceData, IResFoldersData
+        where TModuleData: INamespaceData, IResFoldersData, IIDData
         where TElementData : IGameObjectData, IControllerData
     {
         TElementData previewData;
@@ -26,7 +26,7 @@ namespace UnityUIBuilder.Standard.States
             if(name == "name")
                 component = ComponentGetter.GetFromAssemblies(value, module.data.GetNamespaces(), previewData.GetGameObject());
             else if(component != null)
-                PropertySetter.SetValue(component, name, value, new PropertySetter.Data(previewData, module.data));
+                PropertySetter.SetValue(component, name, value, PropertySetter.Data.Create(previewData, module.data));
         }
 
         public override IXMLElement AddElement(string name)

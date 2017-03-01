@@ -12,7 +12,7 @@ namespace UnityUIBuilder.Standard.Attributes
     public static class PropertySetter
     {
         public static bool SetValue<TData>(object obj, string propertyName, string value, TData data)
-            where TData : IControllerData, IResFoldersData
+            where TData : IControllerData, IGameObjectData, IResFoldersData, IIDData
         {
             var p = obj.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public);
             if(p != null)
@@ -21,7 +21,7 @@ namespace UnityUIBuilder.Standard.Attributes
         }
 
         public static bool SetValue<TData>(PropertyInfo p, object obj, string value, TData data)
-            where TData : IControllerData, IResFoldersData
+            where TData : IControllerData, IGameObjectData, IResFoldersData, IIDData
         {
             if (SetString(p, obj, value)) return true;
             if (SetNumeric(p, obj, value)) return true;
@@ -30,6 +30,8 @@ namespace UnityUIBuilder.Standard.Attributes
             if (SetVector(p, obj, value)) return true;
             if (SetQuaternion(p, obj, value)) return true;
             if (SetUnityEvent(p, obj, value, data.GetController())) return true;
+            if (SetGameObject(p, obj, value, data, data, data)) return true;
+            if (SetComponent(p, obj, value, data, data, data)) return true;
             if (SetResObject(p, obj, value, data.GetResFolders())) return true;
             return false;
         }
@@ -112,6 +114,56 @@ namespace UnityUIBuilder.Standard.Attributes
 
         }
 
+        public static bool SetGameObject(PropertyInfo p, object obj, string value, IIDData idData, IGameObjectData gameObjectData, IResFoldersData resFoldersData)
+        {
+            if (p.PropertyType != typeof(GameObject))
+                return false;
+
+            if(value.IndexOf("id:") == 0)
+            {
+                idData.WaitForID(value.Replace("id:", ""), go => p.SetValue(obj, go, null));
+                return true;
+            }
+
+            var gameObject = ValueGetter.GetGameObject(value, idData, gameObjectData);
+            if (gameObject == null)
+                gameObject = ValueGetter.GetResObject(value, typeof(GameObject), resFoldersData.GetResFolders()) as GameObject;
+
+            if (gameObject != null)
+                p.SetValue(obj, gameObject, null);
+
+            return true;
+
+        }
+
+        public static bool SetComponent(PropertyInfo p, object obj, string value, IIDData idData, IGameObjectData gameObjectData, IResFoldersData resFolderData)
+        {
+            if (p.PropertyType.GetGeneration(typeof(Component)) == -1)
+                return false;
+
+            if (value.IndexOf("id:") == 0)
+            {
+                idData.WaitForID(value.Replace("id:", ""), go => {
+                    var c = go.GetComponent(p.PropertyType);
+                    if(c != null)
+                        p.SetValue(obj, c, null);
+                    }
+                );
+                return true;
+            }
+
+            object component = ValueGetter.GetComponent(value, p.PropertyType, idData, gameObjectData);
+            if (component == null)
+                component = ValueGetter.GetResObject(value, p.PropertyType, resFolderData.GetResFolders());
+
+            if (component != null)
+            {
+                p.SetValue(obj, component, null);
+            }
+
+            return true;
+        }
+
         public static bool SetResObject(PropertyInfo p, object obj, string value, IEnumerable<string> folders)
         {
             if (p.PropertyType.GetGeneration(typeof(UnityEngine.Object)) != 1)
@@ -124,20 +176,26 @@ namespace UnityUIBuilder.Standard.Attributes
             return false;
         }
 
-        public struct Data : IControllerData, IResFoldersData
+        public struct Data : IControllerData, IResFoldersData, IIDData, IGameObjectData
         {
             IControllerData controllerData;
             IResFoldersData resFolderData;
+            IIDData idData;
+            IGameObjectData gameObjectData;
 
-            public Data(IControllerData controllerData, IResFoldersData resFolderData)
+            public static Data Create<TData1, TData2>(TData1 data1, TData2 data2)
+                where TData1 : IGameObjectData, IControllerData
+                where TData2 : IResFoldersData, IIDData
             {
-                this.controllerData = controllerData;
-                this.resFolderData = resFolderData;
+                return new Data
+                {
+                    controllerData = data1,
+                    gameObjectData = data1,
+                    idData = data2,
+                    resFolderData = data2
+                };
             }
 
-            public void AddResFolder(string folder)
-            {
-            }
 
             public MonoBehaviour GetController()
             {
@@ -149,9 +207,37 @@ namespace UnityUIBuilder.Standard.Attributes
                 return resFolderData.GetResFolders();
             }
 
-            public void SetController(MonoBehaviour controller)
+            public GameObject GetObjectByID(string id)
             {
+                return idData.GetObjectByID(id);
             }
+
+
+            public GameObject GetGameObject()
+            {
+                return gameObjectData.GetGameObject();
+            }
+
+            public void WaitForID(string id, Action<GameObject> func)
+            {
+                idData.WaitForID(id, func);
+            }
+
+            void IControllerData.SetController(MonoBehaviour controller)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IResFoldersData.AddResFolder(string folder)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IIDData.AddIDObject(string id, GameObject gameObjetc)
+            {
+                throw new NotImplementedException();
+            }
+
         }
     }
 }

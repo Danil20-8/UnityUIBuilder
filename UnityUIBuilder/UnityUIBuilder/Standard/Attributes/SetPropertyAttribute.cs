@@ -14,7 +14,7 @@ namespace UnityUIBuilder.Standard.Attributes
     /// </summary>
     /// <typeparam name="TModuleData"></typeparam>
     public class SetPropertyAttribute<TAppData, TModuleData, TElementData> : VAttributeHandler<TAppData, TModuleData, TElementData>
-        where TModuleData : IModuleVersionData, IResFoldersData
+        where TModuleData : IModuleVersionData, IResFoldersData, IIDData
         where TElementData : IGameObjectData, IControllerData
     {
         [Version(Versions.std_v_1_0, true)]
@@ -27,7 +27,7 @@ namespace UnityUIBuilder.Standard.Attributes
                     continue;
 
 
-                if (PropertySetter.SetValue(p, go, value, new PropertySetter.Data(element.data, element.module.data))) return true;
+                if (PropertySetter.SetValue(p, go, value, PropertySetter.Data.Create(element.data, element.module.data))) return true;
 
             }
             return false;

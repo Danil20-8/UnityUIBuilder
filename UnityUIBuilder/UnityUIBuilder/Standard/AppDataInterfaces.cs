@@ -6,13 +6,7 @@ using UnityEngine;
 
 namespace UnityUIBuilder.Standard
 {
-    public interface IStandardAppData<TAppData> : IIDData
+    public interface IStandardAppData<TAppData>
     {
-    }
-
-    public interface IIDData
-    {
-        GameObject GetObjectByID(string id);
-        void AddIDObject(string id, GameObject gameObjetc);
     }
 }

@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace UnityUIBuilder.Standard
 {
     public interface IStandardTModuleData<TModuleData> : IModuleVersionData, IDataImport<TModuleData>, IResFoldersData, INamespaceData, IClassData, IIDData
     {
+    }
+
+    public interface IIDData
+    {
+        GameObject GetObjectByID(string id);
+        void AddIDObject(string id, GameObject gameObjetc);
+        void WaitForID(string id, Action<GameObject> func);
     }
 
     public interface IModuleVersionData
