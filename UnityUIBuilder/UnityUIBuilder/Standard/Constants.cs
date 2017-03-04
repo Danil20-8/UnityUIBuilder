@@ -5,9 +5,15 @@ using System.Text;
 
 namespace UnityUIBuilder.Standard
 {
-    public static class Versions
+    public static class STD
     {
-        public const string std_v_1_0 = "std-1.0";
-        public const string std_last = std_v_1_0;
+        public const string lib_name = "std";
+    }
+
+    public static class std_1_0
+    {
+        public const string lib = STD.lib_name;
+        public const string name = "std-1.0";
+        public const int iteration = 1;
     }
 }

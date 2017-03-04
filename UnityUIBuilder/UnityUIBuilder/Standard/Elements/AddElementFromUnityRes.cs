@@ -5,7 +5,7 @@ using System.Text;
 using MyLib.Parsing.XML;
 using UnityEngine;
 
-namespace UnityUIBuilder.Standard.Handlers
+namespace UnityUIBuilder.Standard.Elements
 {
     /// <summary>
     /// Loads, instantiates and adds prefab as element
@@ -15,7 +15,7 @@ namespace UnityUIBuilder.Standard.Handlers
         where TModelData: IResFoldersData, IModuleVersionData
         where TElementData : ICreateChildData<TElementData>
     {
-        [Version(Versions.std_v_1_0, true)]
+        [Version(typeof(std_1_0))]
         new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
         {
             UnityEngine.Object prefab = null;

@@ -8,7 +8,7 @@ namespace UnityUIBuilder.Standard
 {
     public class ModuleData : IStandardTModuleData<ModuleData>
     {
-        string version = Versions.std_last;
+        string version = VersionAttribute.GetLastVersionName(STD.lib_name);
         readonly HashSet<string> namespaces = new HashSet<string>();
         readonly HashSet<string> resFolders = new HashSet<string>();
         readonly Dictionary<string, List<ClassAttribute>> classes = new Dictionary<string, List<ClassAttribute>>();

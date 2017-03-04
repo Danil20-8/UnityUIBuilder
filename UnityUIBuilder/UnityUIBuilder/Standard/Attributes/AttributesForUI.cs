@@ -11,13 +11,12 @@ namespace UnityUIBuilder.Standard.Attributes
         where TModuleData : IModuleVersionData
         where TElementData : IGameObjectData
     {
-        [Version(Versions.std_v_1_0, true)]
+        [Version(typeof(std_1_0))]
         new public bool AddAttribute(string attributeName, string value, XMLElementUI<TAppData, TModuleData, TElementData> element)
         {
             var rt = element.data.GetGameObject().GetComponent<RectTransform>();
             if (rt == null)
                 return false;
-
             switch(attributeName)
             {
                 case "left":

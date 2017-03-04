@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityUIBuilder.Standard;
-using UnityUIBuilder.Standard.Handlers;
+using UnityUIBuilder.Standard.Elements;
 using UnityUIBuilder.Standard.Attributes;
 
 namespace UnityUIBuilder
@@ -87,13 +87,13 @@ namespace UnityUIBuilder
 
         public XMLApplication()
             :base(new AppData(),
-                    new AddElementHandlerList<AppData, ModuleData, ElementData>(
+                    new VListElementHandler<AppData, ModuleData, ElementData>(
                         new AddElementFromConst<AppData, ModuleData, ElementData>(),
                         new AddElementFromUnityRes<AppData, ModuleData, ElementData>(),
                         new AddElementFromAssemblies<AppData, ModuleData, ElementData>()
                         ),
                     new AddRootState<AppData, ModuleData, ElementData>(),
-                    new AttributesList<AppData, ModuleData, ElementData>(
+                    new VListAttributeHandler<AppData, ModuleData, ElementData>(
                         new AttributesForUI<AppData, ModuleData, ElementData>(),
                         new ConstStatementAttribute<AppData, ModuleData, ElementData>(),
                         new SetPropertyAttribute<AppData, ModuleData, ElementData>(),

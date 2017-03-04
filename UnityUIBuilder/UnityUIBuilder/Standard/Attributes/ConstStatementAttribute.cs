@@ -24,7 +24,7 @@ namespace UnityUIBuilder.Standard.Attributes
         /// </summary>
         public const string call_st = "call";
 
-        [Version(Versions.std_v_1_0, true)]
+        [Version(typeof(std_1_0))]
         new public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element)
         {
             switch(attributeName)

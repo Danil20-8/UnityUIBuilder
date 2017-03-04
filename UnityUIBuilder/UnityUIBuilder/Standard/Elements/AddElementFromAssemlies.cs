@@ -6,13 +6,13 @@ using MyLib.Parsing.XML;
 using System.Reflection;
 using UnityEngine;
 using MyLib.Algoriphms;
-namespace UnityUIBuilder.Standard.Handlers
+namespace UnityUIBuilder.Standard.Elements
 {
     public class AddElementFromAssemblies<TAppData, TModelData, TElementData> : VElementHandler<TAppData, TModelData, TElementData>
         where TModelData : INamespaceData, IModuleVersionData
         where TElementData : ICreateChildData<TElementData>
     {
-        [Version(Versions.std_v_1_0, true)]
+        [Version(typeof(std_1_0))]
         new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
         {
             var namespaces = provider.data.GetNamespaces();

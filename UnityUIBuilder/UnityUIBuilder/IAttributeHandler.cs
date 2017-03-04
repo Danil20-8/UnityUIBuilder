@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace UnityUIBuilder
 {
-    public interface IAddAttributeHandler<TAppData, TModelData, TElementData>
+    public interface IAddAttributeHandler<TAppData, TModuleData, TElementData>
     {
-        bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element);
+        bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element);
     }
 }

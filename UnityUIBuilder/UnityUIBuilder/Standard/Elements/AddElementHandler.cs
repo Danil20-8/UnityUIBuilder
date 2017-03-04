@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using MyLib.Parsing.XML;
 
-namespace UnityUIBuilder.Standard.Handlers
+namespace UnityUIBuilder.Standard.Elements
 {
     public class AddElementHandlerList<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>
         where TModuleData : IModuleVersionData 
@@ -18,7 +18,7 @@ namespace UnityUIBuilder.Standard.Handlers
             this.handlers = handlers;
         }
 
-        [Version(Versions.std_v_1_0, true)]
+        [Version(typeof(std_1_0))]
         new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.External provider)
         {
             foreach(var h in handlers)

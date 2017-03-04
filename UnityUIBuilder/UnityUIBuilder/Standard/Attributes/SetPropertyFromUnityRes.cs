@@ -16,7 +16,7 @@ namespace UnityUIBuilder.Standard.Attributes
         where TModelData : IResFoldersData, IModuleVersionData
         where TElementData : IGameObjectData
     {
-        [Version(Versions.std_v_1_0, true)]
+        [Version(typeof(std_1_0))]
         new public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element)
         {
             foreach (var com in element.data.GetGameObject().GetComponentsInChildren<Component>())

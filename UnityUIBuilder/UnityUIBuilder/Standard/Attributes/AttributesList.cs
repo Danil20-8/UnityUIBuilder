@@ -16,7 +16,7 @@ namespace UnityUIBuilder.Standard.Attributes
             this.handlers = handlers;
         }
 
-        [Version(Versions.std_v_1_0, true)]
+        [Version(typeof(std_1_0))]
         new public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element)
         {
             foreach (var h in handlers)

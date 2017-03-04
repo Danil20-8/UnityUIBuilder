@@ -12,39 +12,62 @@ namespace UnityUIBuilder.Standard.Attributes
 
         public delegate bool AddAttributeDelegate(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element);
 
-        Dictionary<string, AddAttributeDelegate> versions = new Dictionary<string, AddAttributeDelegate>();
-        AddAttributeDelegate defaultFunc;
+        public readonly string libName;
+        List<Version> versions = new List<Version>();
 
-        public VAttributeHandler()
+        public VAttributeHandler(string libName = STD.lib_name)
         {
+            this.libName = libName;
             foreach (var m in this.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-            {
-                var attrs = m.GetCustomAttributes(typeof(VersionAttribute), false);
-                if (attrs.Length > 0)
+                foreach(var a in m.GetCustomAttributes(typeof(VersionAttribute), false).Cast<VersionAttribute>())
                 {
-                    VersionAttribute a = (VersionAttribute)attrs[0];
-
                     var f = Delegate.CreateDelegate(typeof(AddAttributeDelegate), this, m) as AddAttributeDelegate;
-
-                    versions.Add(a.version, f);
-
-                    if (a.useByDefault)
-                        defaultFunc = f;
+                    versions.Add(new Version(a.name, a.iteration, f));
                 }
-            }
+            versions.Sort();
         }
 
         public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element)
         {
-            AddAttributeDelegate ae;
+            var m = GetMethod(element.module.data.GetVersion());
+            if (m != null)
+                return m(attributeName, attributeValue, element);
 
-            if (versions.TryGetValue(element.module.data.GetVersion(), out ae))
-                return ae.Invoke(attributeName, attributeValue, element);
-            else if (defaultFunc != null)
-                return defaultFunc.Invoke(attributeName, attributeValue, element);
-
-            element.module.app.PushError("Please, pass module version to the begin of module");
             return false;
+        }
+
+        public AddAttributeDelegate GetMethod(string versionName)
+        {
+            var t = versions.Find(v => v.name == versionName);
+            if (t == null)
+            {
+                var i = VersionAttribute.GetIteration(libName, versionName);
+                foreach (var v in versions)
+                    if (v.iteration <= i)
+                        t = v;
+                    else
+                        break;
+            }
+            return t != null ? t.addAttribute : null;
+        }
+
+        class Version : IComparable<Version>
+        {
+            public readonly string name;
+            public readonly int iteration;
+            public AddAttributeDelegate addAttribute;
+
+            public Version(string name, int iteration, AddAttributeDelegate addAttribute)
+            {
+                this.name = name;
+                this.iteration = iteration;
+                this.addAttribute = addAttribute;
+            }
+
+            public int CompareTo(Version other)
+            {
+                return iteration < other.iteration ? -1 : (iteration > other.iteration ? 1 : 0);
+            }
         }
     }
 }
