@@ -39,12 +39,7 @@ namespace UnityUIBuilder
         {
             var source = Load(moduleName);
 
-            if (source != null)
-                return Perform(moduleName, source, rootData);
-            else {
-                PushError(moduleName + " is not found");
-                return null;
-            }
+            return Perform(moduleName, source, rootData);
         }
 
         public XMLModule<TAppData, TModelData, TElementData> Perform(string moduleName, IEnumerable<char> source, TElementData rootData)
@@ -58,22 +53,26 @@ namespace UnityUIBuilder
 
         protected virtual IEnumerable<char> Load(string moduleName)
         {
-            return Resources.Load<TextAsset>(moduleName).text;
+            var result = Resources.Load<TextAsset>(moduleName);
+            if (result != null)
+                return result.text;
+
+            throw new Exception("Module " + moduleName + " is not found");
         }
 
-        public void PushError(string format, params object[] args)
+        public void Log(string format, params object[] args)
         {
-            PushError(string.Format(format, args));
+            Log(string.Format(format, args));
         }
 
-        public void PushError<T>(T message)
+        public void Log<T>(T message)
         {
-            PushError(message.ToString());
+            Log(message.ToString());
         }
 
-        public virtual void PushError(string message)
+        public virtual void Log(string message)
         {
-            throw new Exception(message);
+            UnityEngine.Debug.Log(message);
         }
     }
 
@@ -96,8 +95,7 @@ namespace UnityUIBuilder
                     new VListAttributeHandler<AppData, ModuleData, ElementData>(
                         new AttributesForUI<AppData, ModuleData, ElementData>(),
                         new ConstStatementAttribute<AppData, ModuleData, ElementData>(),
-                        new SetPropertyAttribute<AppData, ModuleData, ElementData>(),
-                        new SetPropertyFromUnityRes<AppData, ModuleData, ElementData>()
+                        new SetPropertyAttribute<AppData, ModuleData, ElementData>()
                         )
                     )
         {

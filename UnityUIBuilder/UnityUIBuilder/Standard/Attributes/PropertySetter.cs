@@ -166,7 +166,7 @@ namespace UnityUIBuilder.Standard.Attributes
 
         public static bool SetResObject(PropertyInfo p, object obj, string value, IEnumerable<string> folders)
         {
-            if (p.PropertyType.GetGeneration(typeof(UnityEngine.Object)) != 1)
+            if (p.PropertyType.GetGeneration(typeof(UnityEngine.Object)) != -1)
             {
                 var res = ValueGetter.GetResObject(value, p.PropertyType, folders);
                 if (res != null)

@@ -17,11 +17,12 @@ namespace UnityUIBuilder.Standard.States
 
         public override void AddAttribute(string name, string value)
         {
+            module.app.Log("version element doesn't support attributes. Use set value xml style for tell which version should be used.");
         }
 
         public override IXMLElement AddElement(string name)
         {
-            return new FakeElement(name);
+            throw new AddElementException(name, this.name, "version element doesn't supports nested elements. Use set value xml style for tell which version should be used.");
         }
 
         public override void SetValue(string value)

@@ -17,34 +17,40 @@ namespace UnityUIBuilder.Standard.Attributes
             var rt = element.data.GetGameObject().GetComponent<RectTransform>();
             if (rt == null)
                 return false;
-            switch(attributeName)
+            try
             {
-                case "left":
-                    Left(rt, value);
-                    return true;
-                case "right":
-                    Right(rt, value);
-                    return true;
-                case "bottom":
-                    Bottom(rt, value);
-                    return true;
-                case "top":
-                    Top(rt, value);
-                    return true;
-                case "width":
-                    Width(rt, value);
-                    return true;
-                case "height":
-                    Height(rt, value);
-                    return true;
-                case "side":
-                    Side(rt, value);
-                    return true;
-                case "anchor":
-                    Anchor(rt, value);
-                    return true;
+                switch (attributeName)
+                {
+                    case "left":
+                        Left(rt, value);
+                        return true;
+                    case "right":
+                        Right(rt, value);
+                        return true;
+                    case "bottom":
+                        Bottom(rt, value);
+                        return true;
+                    case "top":
+                        Top(rt, value);
+                        return true;
+                    case "width":
+                        Width(rt, value);
+                        return true;
+                    case "height":
+                        Height(rt, value);
+                        return true;
+                    case "side":
+                        Side(rt, value);
+                        return true;
+                    case "anchor":
+                        Anchor(rt, value);
+                        return true;
+                }
             }
-
+            catch(Exception e)
+            {
+                throw new SetAttributeException(attributeName, value, element.name, e);
+            }
             return false;
         }
 

@@ -27,7 +27,7 @@ namespace UnityUIBuilder.Standard.States
 
         public override IXMLElement AddElement(string name)
         {
-            module.app.PushError("include does not support nested elements");
+            module.app.Log("include does not support nested elements");
             return null;
         }
 
@@ -38,9 +38,15 @@ namespace UnityUIBuilder.Standard.States
 
         void IncludeXML(string name)
         {
-            var m = module.app.Perform(name, module.rootData);
-
-            module.data.ImportData(m.data);
+            try
+            {
+                var m = module.app.Perform(name, module.rootElement.data);
+                module.data.ImportData(m.data);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

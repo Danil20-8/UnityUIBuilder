@@ -24,7 +24,7 @@ namespace UnityUIBuilder
 
         public IXMLElement AddElement(string name)
         {
-            return module.HandleElement(name, data);
+            return module.HandleElement(name, this);
         }
 
         public void SetValue(string value)

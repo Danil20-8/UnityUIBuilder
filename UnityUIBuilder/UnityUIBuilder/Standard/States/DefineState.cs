@@ -16,12 +16,20 @@ namespace UnityUIBuilder.Standard.States
 
         public override IXMLElement AddElement(string name)
         {
-            module.data.AddClass(name, new ClassAttribute[0]);
+            try
+            {
+                module.data.AddClass(name, new ClassAttribute[0]);
+            }
+            catch
+            {
+                throw new AddElementException(name, this.name, "module already contains defenition for the class");
+            }
             return new DefineHelper(name, module);
         }
 
         public override void SetValue(string value)
         {
+            module.app.Log("define element doesn't support values");
         }
 
         class DefineHelper : State<TAppData, TModelData, TElementData>
@@ -35,12 +43,13 @@ namespace UnityUIBuilder.Standard.States
 
             public override IXMLElement AddElement(string name)
             {
-                module.app.PushError("define: " + this.name + ": Class definition can't contain nested elements");
+                module.app.Log("class element cannot't contain nested elements.");
                 return new FakeElement(name);
             }
 
             public override void SetValue(string value)
             {
+                module.app.Log("class element doesn't support values");
             }
         }
     }

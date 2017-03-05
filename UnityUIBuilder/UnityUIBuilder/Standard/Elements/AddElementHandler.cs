@@ -19,15 +19,15 @@ namespace UnityUIBuilder.Standard.Elements
         }
 
         [Version(typeof(std_1_0))]
-        new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.External provider)
+        new public IXMLElement AddElement(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
         {
             foreach(var h in handlers)
             {
-                var result = h.AddElement(name, previewData, provider);
+                var result = h.AddElement(name, previewElement);
                 if (result != null) return result;
             }
 
-            return provider.AddElement(name, previewData.CreateChild(name));
+            throw new AddElementException(name, previewElement.name, "Ensure you added required using namespaces or folders. If you need an empty gameObject use \"void\" element.");
         }
     }
 }

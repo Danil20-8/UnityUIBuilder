@@ -26,8 +26,13 @@ namespace UnityUIBuilder.Standard.Attributes
                 if (p == null)
                     continue;
 
-
-                if (PropertySetter.SetValue(p, go, value, PropertySetter.Data.Create(element.data, element.module.data))) return true;
+                try {
+                    if (PropertySetter.SetValue(p, go, value, PropertySetter.Data.Create(element.data, element.module.data))) return true;
+                }
+                catch(Exception e)
+                {
+                    throw new SetAttributeException(attributeName, value, element.name, e);
+                }
 
             }
             return false;

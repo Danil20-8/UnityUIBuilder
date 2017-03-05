@@ -3,45 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using MyLib.Parsing.XML;
 
-namespace UnityUIBuilder.Standard.Attributes
+namespace UnityUIBuilder.Standard.Elements
 {
-    public abstract class VAttributeHandler<TAppData, TModuleData, TElementData> : IAddAttributeHandler<TAppData, TModuleData, TElementData>
+    public abstract class VElementHandler<TAppData, TModuleData, TElementData> : IAddElementHandler<TAppData, TModuleData, TElementData>
         where TModuleData : IModuleVersionData
     {
+        public delegate IXMLElement AddElementDelegate(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement);
 
-        public delegate bool AddAttributeDelegate(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element);
-
-        public readonly string libName;
+        string libName;
         List<Version> versions = new List<Version>();
 
-        public VAttributeHandler(string libName = STD.lib_name)
+        public VElementHandler(string libName = STD.lib_name)
         {
             this.libName = libName;
             foreach (var m in this.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-                foreach(var a in m.GetCustomAttributes(typeof(VersionAttribute), false).Cast<VersionAttribute>())
+                foreach (var a in m.GetCustomAttributes(typeof(VersionAttribute), false).Cast<VersionAttribute>())
                 {
-                    var f = Delegate.CreateDelegate(typeof(AddAttributeDelegate), this, m) as AddAttributeDelegate;
-                    versions.Add(new Version(a.name, a.iteration, f));
+                    var f = Delegate.CreateDelegate(typeof(AddElementDelegate), this, m) as AddElementDelegate;
+                    if (f != null)
+                        versions.Add(new Version(a.name, a.iteration, f));
+                    else
+                        throw new Exception(m.Name + " is not valid.");
                 }
             versions.Sort();
         }
-
-        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element)
+        public IXMLElement AddElement(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
         {
-            var m = GetMethod(element.module.data.GetVersion());
+            var m = GetMethod(previewElement.module.data.GetVersion());
             if (m != null)
-                return m(attributeName, attributeValue, element);
+                return m(name, previewElement);
 
-            throw new VersionException(this, element.module.data.GetVersion());
+            throw new VersionException(this, previewElement.module.data.GetVersion());
         }
 
-        public AddAttributeDelegate GetMethod(string versionName)
+        public AddElementDelegate GetMethod(string versionName)
         {
             var t = versions.Find(v => v.name == versionName);
             if (t == null)
             {
-                try {
+                try
+                {
                     var i = VersionAttribute.GetIteration(libName, versionName);
                     foreach (var v in versions)
                         if (v.iteration <= i)
@@ -61,9 +64,9 @@ namespace UnityUIBuilder.Standard.Attributes
         {
             public readonly string name;
             public readonly int iteration;
-            public AddAttributeDelegate addAttribute;
+            public AddElementDelegate addAttribute;
 
-            public Version(string name, int iteration, AddAttributeDelegate addAttribute)
+            public Version(string name, int iteration, AddElementDelegate addAttribute)
             {
                 this.name = name;
                 this.iteration = iteration;

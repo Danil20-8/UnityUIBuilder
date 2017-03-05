@@ -13,16 +13,16 @@ namespace UnityUIBuilder.Standard.Elements
         where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>, ICreateChildData<TElementData>
     {
         [Version(typeof(std_1_0))]
-        new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.External provider)
+        new public IXMLElement AddElement(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
         {
             switch(name)
             {
                 case "controller":
-                    return new ControllerState<TAppData, TModuleData, TElementData>(previewData, provider.GetInternal());
+                    return new ControllerState<TAppData, TModuleData, TElementData>(previewElement);
                 case "component":
-                    return new ComponentState<TAppData, TModuleData, TElementData>(previewData, provider.GetInternal());
+                    return new ComponentState<TAppData, TModuleData, TElementData>(previewElement);
                 case "void":
-                    return provider.AddElement(name, previewData.CreateChild(name));
+                    return previewElement.module.AddElement(name, previewElement.data.CreateChild(name));
                 default:
                     return null;
             }

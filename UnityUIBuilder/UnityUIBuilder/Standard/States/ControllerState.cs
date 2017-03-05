@@ -11,18 +11,19 @@ namespace UnityUIBuilder.Standard.States
         where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>
         where TModuleData : IIDData
     {
-        TElementData data;
+        XMLElementUI<TAppData, TModuleData, TElementData> element;
         GameObject id = null;
 
-        public ControllerState(TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.Internal module)
-            :this("controller", previewData, module)
+        public ControllerState(XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
+            :this("controller", previewElement)
         {
         }
 
-        public ControllerState(string name, TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.Internal module)
-            :base(name, module)
+        public ControllerState(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
+            :base(name, previewElement.module)
         {
-            data = previewData.Clone();
+            // creating new element with clone preview element data to keep preview controller unaltered
+            element = new XMLElementUI<TAppData, TModuleData, TElementData>(previewElement.name, previewElement.data.Clone(), module);
         }
 
         public override void AddAttribute(string name, string value)
@@ -34,30 +35,36 @@ namespace UnityUIBuilder.Standard.States
                     if (id != null)
                         controller = id.GetComponent<MonoBehaviour>();
                     else
-                        controller = data.GetGameObject().GetComponentsInParent<MonoBehaviour>(true)
+                        controller = element.data.GetGameObject().GetComponentsInParent<MonoBehaviour>(true)
                             .FirstOrDefault(b => b.GetType().Name == value);
                     if (controller == null)
-                        module.app.PushError("controller: " + name + " is not found");
+                        throw new SetAttributeException(name, value, this.name, "controller's not found. Ensure you wrote it correct, added a gameObject with this component with id or one of outer gameObject has this component.");
                     else
                     {
-                        data.SetController(controller);
+                        element.data.SetController(controller);
                     }
                     break;
                 case "id":
-                    id = module.data.GetObjectByID(value);
+                    try {
+                        id = module.data.GetObjectByID(value);
+                    }
+                    catch
+                    {
+                        throw new SetAttributeException(name, value, this.name, "GameObject with id is not found. Ensure you wrote correct id or one of upper gameObjects has the id.");
+                    }
                     break;
             }
         }
 
         public override IXMLElement AddElement(string name)
         {
-            if (data.GetController() == null) module.app.PushError("controller requiers name=\"controllerName\" attribute");
-            return module.HandleElement(name, data);
+            if (element.data.GetController() == null) throw new AddElementException(name, this.name, "Please, add aatribute name to the controller before you will able add child elements.");
+            return module.HandleElement(name, element);
         }
 
         public override void SetValue(string value)
         {
-            module.app.PushError("controller element doesn't support a value");
+            module.app.Log("controller element doesn't support a value");
         }
     }
 }

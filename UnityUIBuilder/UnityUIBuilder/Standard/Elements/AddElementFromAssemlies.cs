@@ -8,21 +8,21 @@ using UnityEngine;
 using MyLib.Algoriphms;
 namespace UnityUIBuilder.Standard.Elements
 {
-    public class AddElementFromAssemblies<TAppData, TModelData, TElementData> : VElementHandler<TAppData, TModelData, TElementData>
-        where TModelData : INamespaceData, IModuleVersionData
+    public class AddElementFromAssemblies<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>
+        where TModuleData : INamespaceData, IModuleVersionData
         where TElementData : ICreateChildData<TElementData>
     {
         [Version(typeof(std_1_0))]
-        new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModelData, TElementData>.External provider)
+        new public IXMLElement AddElement(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
         {
-            var namespaces = provider.data.GetNamespaces();
+            var namespaces = previewElement.module.data.GetNamespaces();
 
             var componentType = ComponentGetter.GetFromAssemblies(name, namespaces);
             if(componentType != null)
             {
                 GameObject go = new GameObject(name);
                 go.AddComponent(componentType);
-                return provider.AddElement(name, previewData.CreateChild(go));
+                return previewElement.module.AddElement(name, previewElement.data.CreateChild(go));
             }
 
             return null;

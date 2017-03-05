@@ -52,7 +52,6 @@
     <Compile Include="Standard\Attributes\AttributesList.cs" />
     <Compile Include="Standard\Attributes\ConstStatementAttribute.cs" />
     <Compile Include="Standard\Attributes\SetPropertyAttribute.cs" />
-    <Compile Include="Standard\Attributes\SetPropertyFromUnityRes.cs" />
     <Compile Include="Standard\Attributes\ValueGetter.cs" />
     <Compile Include="Standard\Attributes\PropertySetter.cs" />
     <Compile Include="Standard\Attributes\VAttributeHandler.cs" />
@@ -65,6 +64,7 @@
     <Compile Include="Standard\Elements\AddRootStateHandler.cs" />
     <Compile Include="Standard\Elements\VElementHandler.cs" />
     <Compile Include="Standard\Elements\VListElementHandler.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Standard\States\ComponentState.cs" />
     <Compile Include="Standard\States\ControllerState.cs" />
     <Compile Include="Standard\ModuleDataInterfaces.cs" />

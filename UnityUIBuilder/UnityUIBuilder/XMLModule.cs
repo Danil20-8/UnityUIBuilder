@@ -1,29 +1,29 @@
 ﻿using MyLib.Parsing.XML;
+using MyLib.Parsing;
 using System;
 using System.Collections.Generic;
 
 namespace UnityUIBuilder
 {
 
-    public class XMLModule<TAppData, TModelData, TElementData> : IXMLModule
+    public class XMLModule<TAppData, TModuleData, TElementData> : IXMLModule
     {
-        public readonly TModelData data;
-        public readonly XMLApplication<TAppData, TModelData, TElementData> app;
-        readonly TElementData rootData;
+        public readonly TModuleData data;
+        public readonly XMLApplication<TAppData, TModuleData, TElementData> app;
+        readonly XMLElementUI<TAppData, TModuleData, TElementData> rootElement;
 
         readonly Internal _in;
 
-        public XMLModule(XMLApplication<TAppData, TModelData, TElementData> app, TElementData rootData)
-            :this(app, rootData, Activator.CreateInstance<TModelData>())
+        public XMLModule(XMLApplication<TAppData, TModuleData, TElementData> app, TElementData rootData)
+            :this(app, rootData, Activator.CreateInstance<TModuleData>())
         {
         }
-        public XMLModule(XMLApplication<TAppData, TModelData, TElementData> app, TElementData rootData, TModelData data)
+        public XMLModule(XMLApplication<TAppData, TModuleData, TElementData> app, TElementData rootData, TModuleData data)
         {
             this.app = app;
             this.data = data;
-            this.rootData = rootData;
-
             _in = new Internal(this);
+            this.rootElement = new XMLElementUI<TAppData, TModuleData, TElementData>("root", rootData, _in);
         }
 
         IXMLElement IXMLModule.AddElement(string name)
@@ -31,32 +31,38 @@ namespace UnityUIBuilder
             return _in.HandleElement(name);
         }
 
-        IXMLElement AddElement(string name, TElementData previewData)
+        IXMLElement AddElement(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
         {
-            return _in.HandleElement(name, previewData);
+            return _in.HandleElement(name, previewElement);
         }
 
         public void Perform(IEnumerable<char> source)
         {
             XMLParser xml = new XMLParser();
-            xml.Parse(source, this);
+            try {
+                xml.Parse(source, this);
+            }
+            catch(EndOfSequenceParseException e)
+            {
+                throw new XMLParseException("XML Module parse exception: syntax error.", e);
+            }
         }
 
         public class External
         {
-            protected XMLModule<TAppData, TModelData, TElementData> module;
+            protected XMLModule<TAppData, TModuleData, TElementData> module;
 
-            public XMLApplication<TAppData, TModelData, TElementData> app { get { return module.app; } }
-            public TModelData data { get { return module.data; } }
+            public XMLApplication<TAppData, TModuleData, TElementData> app { get { return module.app; } }
+            public TModuleData data { get { return module.data; } }
 
-            public External(XMLModule<TAppData, TModelData, TElementData> module)
+            public External(XMLModule<TAppData, TModuleData, TElementData> module)
             {
                 this.module = module;
             }
 
             public IXMLElement AddElement(string name, TElementData elementData)
             {
-                return new XMLElementUI<TAppData, TModelData, TElementData>(name, elementData, module._in);
+                return new XMLElementUI<TAppData, TModuleData, TElementData>(name, elementData, module._in);
             }
 
             public Internal GetInternal()
@@ -70,21 +76,18 @@ namespace UnityUIBuilder
         /// </summary>
         public class Internal: External
         {
-            public TElementData rootData { get { return module.rootData; } }
+            public XMLElementUI<TAppData, TModuleData, TElementData> rootElement { get { return module.rootElement; } }
 
-            public Internal(XMLModule<TAppData, TModelData, TElementData> module) : base(module) { }
+            public Internal(XMLModule<TAppData, TModuleData, TElementData> module) : base(module) { }
 
             public IXMLElement HandleElement(string name)
             {
-                var result = app.rootAddElementHandler.AddElement(name, module.rootData, this);
-                if (result != null)
-                    return result;
-                return HandleElement(name, module.rootData);
+                return app.rootAddElementHandler.AddElement(name, module.rootElement);
             }
 
-            public IXMLElement HandleElement(string name, TElementData previewData)
+            public IXMLElement HandleElement(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
             {
-                return app.addElementHandler.AddElement(name, previewData, this);
+                return app.addElementHandler.AddElement(name, previewElement);
             }
 
         }

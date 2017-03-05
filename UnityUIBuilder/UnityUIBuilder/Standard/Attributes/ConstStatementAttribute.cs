@@ -34,7 +34,10 @@ namespace UnityUIBuilder.Standard.Attributes
                         element.AddAttribute(a.name, a.value);
                     return true;
                 case id_st:
-                    element.module.data.AddIDObject(attributeValue, element.data.GetGameObject());
+                    try {
+                        element.module.data.AddIDObject(attributeValue, element.data.GetGameObject());
+                    }
+                    catch(Exception e) { throw new SetAttributeException(attributeName, attributeValue, element.name, e); }
                     return true;
                 case call_st:
                     var controller = element.data.GetController();
@@ -42,7 +45,7 @@ namespace UnityUIBuilder.Standard.Attributes
 
                     var m = controller.GetType().GetMethod(attributeValue, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new Type[] { typeof(GameObject) }, null);
                     if (m != null) m.Invoke(controller, new object[] { gameObject });
-                    else element.module.app.PushError(controller + " has no a method name " + attributeValue);
+                    else throw new SetAttributeException(attributeName, attributeValue, element.name, controller + " has no method " + attributeValue + "(GameObject sender).");
                     return true;
                 default:
                     return false;

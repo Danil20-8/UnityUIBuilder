@@ -7,6 +7,14 @@ using MyLib.Algoriphms;
 
 namespace UnityUIBuilder.Standard
 {
+    public class VersionException : Exception
+    {
+        public VersionException(object errorObject, string versionName)
+            :base(errorObject.GetType().Name + " doesn't supports the " + versionName + " version" )
+        {
+        }
+    }
+
     [AttributeUsage(AttributeTargets.Method)]
     public class VersionAttribute : Attribute
     {

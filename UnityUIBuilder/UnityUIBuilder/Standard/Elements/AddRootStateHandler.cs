@@ -13,20 +13,20 @@ namespace UnityUIBuilder.Standard.Elements
         where TElementData : ITransformData
     {
         [Version(typeof(std_1_0))]
-        new public IXMLElement AddElement(string name, TElementData previewData, XMLModule<TAppData, TModuleData, TElementData>.External module)
+        new public IXMLElement AddElement(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
         {
             switch(name)
             {
                 case "version":
-                    return new VersionState<TAppData, TModuleData, TElementData>(module.GetInternal());
+                    return new VersionState<TAppData, TModuleData, TElementData>(previewElement.module);
                 case "using":
-                    return new UsingState<TAppData, TModuleData, TElementData>(module.GetInternal());
+                    return new UsingState<TAppData, TModuleData, TElementData>(previewElement.module);
                 case "include":
-                    return new IncludeState<TAppData, TModuleData, TElementData>(module.GetInternal());
+                    return new IncludeState<TAppData, TModuleData, TElementData>(previewElement.module);
                 case "define":
-                    return new DefineState<TAppData, TModuleData, TElementData>(module.GetInternal());
+                    return new DefineState<TAppData, TModuleData, TElementData>(previewElement.module);
                 default:
-                    return module.GetInternal().HandleElement(name, previewData);
+                    return previewElement.module.HandleElement(name, previewElement);
             }
         }
     }

@@ -28,12 +28,13 @@ namespace UnityUIBuilder.Standard.States
 
         public override IXMLElement AddElement(string name)
         {
-            module.app.PushError("using element can't contain nested elements");
+            module.app.Log("using element can't contain nested elements.");
             return new FakeElement(name);
         }
 
         public override void SetValue(string value)
         {
+            module.app.Log("using element doesn't suppot values.");
         }
     }
 }
