@@ -84,11 +84,11 @@ namespace UnityUIBuilder.Standard.Attributes
 
         void Left(RectTransform transform, string value)
         {
-            float x;
-            if (GetValue(value, out x))
+            float left;
+            if (GetValue(value, out left))
             {
                 var anch = transform.anchorMin;
-                anch.x = x;
+                anch.x = left;
                 var pos = transform.anchoredPosition;
                 pos.x = 0;
 
@@ -98,21 +98,27 @@ namespace UnityUIBuilder.Standard.Attributes
             else
             {
                 Vector3 pos = transform.anchoredPosition;
-                pos.x = x;
+                Vector3 size = transform.sizeDelta;
+                float right = pos.x + size.x / 2;
+
+                size.x = (right - left);
+                pos.x = size.x / 2 + left;
+
                 var anch = transform.anchorMin;
                 anch.x = 0;
 
                 transform.anchorMin = anch;
                 transform.anchoredPosition = pos;
+                transform.sizeDelta = size;
             }
         }
         void Right(RectTransform transform, string value)
         {
-            float x;
-            if (GetValue(value, out x))
+            float right;
+            if (GetValue(value, out right))
             {
                 var anch = transform.anchorMax;
-                anch.x = x;
+                anch.x = right;
                 var pos = transform.sizeDelta;
                 pos.x = 0;
 
@@ -121,23 +127,28 @@ namespace UnityUIBuilder.Standard.Attributes
             }
             else
             {
-                var pos = transform.sizeDelta;
-                pos.x = x;
+                Vector3 pos = transform.anchoredPosition;
+                Vector3 size = transform.sizeDelta;
+                float left = pos.x - size.x / 2;
+
+                size.x = (-right - left);
+                pos.x = size.x / 2 + left;
 
                 var anch = transform.anchorMax;
                 anch.x = 1;
 
                 transform.anchorMax = anch;
-                transform.sizeDelta = pos;
+                transform.anchoredPosition = pos;
+                transform.sizeDelta = size;
             }
         }
         void Top(RectTransform transform, string value)
         {
-            float y;
-            if (GetValue(value, out y))
+            float top;
+            if (GetValue(value, out top))
             {
                 var anch = transform.anchorMax;
-                anch.y = y;
+                anch.y = top;
                 var pos = transform.sizeDelta;
                 pos.y = 0;
 
@@ -146,18 +157,28 @@ namespace UnityUIBuilder.Standard.Attributes
             }
             else
             {
-                Vector3 pos = transform.sizeDelta;
-                pos.y = y;
-                transform.sizeDelta = pos;
+                Vector3 pos = transform.anchoredPosition;
+                Vector3 size = transform.sizeDelta;
+                float bottom = pos.y - size.y / 2;
+
+                size.y = (-top - bottom);
+                pos.y = size.y / 2 + bottom;
+
+                var anch = transform.anchorMax;
+                anch.y = 1;
+
+                transform.anchorMax = anch;
+                transform.anchoredPosition = pos;
+                transform.sizeDelta = size;
             }
         }
         void Bottom(RectTransform transform, string value)
         {
-            float y;
-            if (GetValue(value, out y))
+            float bottom;
+            if (GetValue(value, out bottom))
             {
                 var anch = transform.anchorMin;
-                anch.y = y;
+                anch.y = bottom;
                 var pos = transform.anchoredPosition;
                 pos.y = 0;
 
@@ -167,8 +188,18 @@ namespace UnityUIBuilder.Standard.Attributes
             else
             {
                 Vector3 pos = transform.anchoredPosition;
-                pos.y = y;
+                Vector3 size = transform.sizeDelta;
+                float top = pos.y + size.y / 2;
+
+                size.y = (top - bottom);
+                pos.y = size.y / 2 + bottom;
+
+                var anch = transform.anchorMin;
+                anch.y = 0;
+
+                transform.anchorMin = anch;
                 transform.anchoredPosition = pos;
+                transform.sizeDelta = size;
             }
         }
 
