@@ -22,9 +22,9 @@ namespace UnityUIBuilder.Standard.Elements
                 case "component":
                     return new ComponentState<TAppData, TModuleData, TElementData>(previewElement);
                 case "void":
-                    return previewElement.module.AddElement(name, previewElement.data.CreateChild(name));
+                    return previewElement.CreateElement(name, previewElement.data.CreateChild(name));
                 default:
-                    return null;
+                    return new BombElement(name, previewElement.name);
             }
         }
     }

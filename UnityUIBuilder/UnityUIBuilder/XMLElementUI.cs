@@ -2,19 +2,29 @@
 
 namespace UnityUIBuilder
 {
-    public class XMLElementUI<TAppData, TModelData, TElementData> : IXMLElement
+    public class XMLElementUI<TAppData, TModuleData, TElementData> : IXMLElement
     {
-        public readonly XMLModule<TAppData, TModelData, TElementData>.Internal module;
+        public readonly XMLModule<TAppData, TModuleData, TElementData> module;
         public readonly TElementData data;
 
 
         public string name { get; private set; }
 
-        public XMLElementUI(string name, TElementData data, XMLModule<TAppData, TModelData, TElementData>.Internal module)
+        public XMLElementUI(string name, TElementData data, XMLModule<TAppData, TModuleData, TElementData> module)
         {
             this.name = name;
             this.data = data;
             this.module = module;
+        }
+
+        public IXMLElement AddElement(string name)
+        {
+            return module.app.addElementHandler.AddElement(name, this);
+        }
+
+        public IXMLElement CreateElement(string name, TElementData data)
+        {
+            return new XMLElementUI<TAppData, TModuleData, TElementData>(name, data, module);
         }
 
         public void AddAttribute(string name, string value)
@@ -22,14 +32,9 @@ namespace UnityUIBuilder
             module.app.addAttributeHandler.AddAttribute(name, value, this);
         }
 
-        public IXMLElement AddElement(string name)
+        void IXMLElement.SetValue(string value)
         {
-            return module.HandleElement(name, this);
-        }
-
-        public void SetValue(string value)
-        {
-            AddAttribute("text", value);
+            (this as IXMLElement).AddAttribute("text", value);
         }
     }
 }

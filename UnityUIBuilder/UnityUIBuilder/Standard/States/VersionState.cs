@@ -10,14 +10,14 @@ namespace UnityUIBuilder.Standard.States
         where TModuleData : IModuleVersionData
     {
 
-        public VersionState(XMLModule<TAppData, TModuleData, TElementData>.Internal module)
-            :base("version", module)
+        public VersionState(XMLElementUI<TAppData, TModuleData, TElementData> element)
+            :base("version", element)
         {
         }
 
         public override void AddAttribute(string name, string value)
         {
-            module.app.Log("version element doesn't support attributes. Use set value xml style for tell which version should be used.");
+            element.module.app.Log("version element doesn't support attributes. Use set value xml style for tell which version should be used.");
         }
 
         public override IXMLElement AddElement(string name)
@@ -27,7 +27,7 @@ namespace UnityUIBuilder.Standard.States
 
         public override void SetValue(string value)
         {
-            module.data.SetVersion(value);
+            element.module.data.SetVersion(value);
         }
     }
 }

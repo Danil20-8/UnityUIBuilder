@@ -18,15 +18,15 @@ namespace UnityUIBuilder.Standard.Elements
             switch(name)
             {
                 case "version":
-                    return new VersionState<TAppData, TModuleData, TElementData>(previewElement.module);
+                    return new VersionState<TAppData, TModuleData, TElementData>(previewElement);
                 case "using":
-                    return new UsingState<TAppData, TModuleData, TElementData>(previewElement.module);
+                    return new UsingState<TAppData, TModuleData, TElementData>(previewElement);
                 case "include":
-                    return new IncludeState<TAppData, TModuleData, TElementData>(previewElement.module);
+                    return new IncludeState<TAppData, TModuleData, TElementData>(previewElement);
                 case "define":
-                    return new DefineState<TAppData, TModuleData, TElementData>(previewElement.module);
+                    return new DefineState<TAppData, TModuleData, TElementData>(previewElement);
                 default:
-                    return previewElement.module.HandleElement(name, previewElement);
+                    return previewElement.AddElement(name);
             }
         }
     }

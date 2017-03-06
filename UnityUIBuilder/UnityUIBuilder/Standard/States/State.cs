@@ -9,9 +9,9 @@ namespace UnityUIBuilder.Standard.States
     public abstract class State<TAppData, TModelData, TElementData> : IXMLElement
     {
         public string name { get; private set; }
-        protected XMLModule<TAppData, TModelData, TElementData>.Internal module;
+        protected XMLElementUI<TAppData, TModelData, TElementData> element;
 
-        public State(string name, XMLModule<TAppData, TModelData, TElementData>.Internal module) { this.name = name; this.module = module; }
+        public State(string name, XMLElementUI<TAppData, TModelData, TElementData> element) { this.name = name; this.element = element; }
 
         public abstract void AddAttribute(string name, string value);
 

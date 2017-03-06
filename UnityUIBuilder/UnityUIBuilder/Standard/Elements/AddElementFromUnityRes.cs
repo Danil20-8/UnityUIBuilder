@@ -23,11 +23,12 @@ namespace UnityUIBuilder.Standard.Elements
             {
                 prefab = Resources.Load(string.Join("/", new string[] { folder, name }));
                 if (prefab != null)
-                    return previewElement.module.AddElement(name,
+                    return previewElement.CreateElement(name,
                         previewElement.data.CreateChild(GameObject.Instantiate((prefab as GameObject)))
                         );
             }
-            return null;
+
+            return new BombElement(name, previewElement.name);
         }
     }
 }

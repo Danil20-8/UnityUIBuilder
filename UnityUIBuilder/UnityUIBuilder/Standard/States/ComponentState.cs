@@ -12,38 +12,36 @@ namespace UnityUIBuilder.Standard.States
         where TModuleData: INamespaceData, IResFoldersData, IIDData
         where TElementData : IGameObjectData, IControllerData
     {
-        TElementData previewData;
         Component component;
 
-        public ComponentState(XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
-            : base("component", previewElement.module)
+        public ComponentState(XMLElementUI<TAppData, TModuleData, TElementData> element)
+            : base("component", element)
         {
-            this.previewData = previewElement.data;
         }
 
         public override void AddAttribute(string name, string value)
         {
             if (name == "name")
             {
-                component = ComponentGetter.GetFromAssemblies(value, module.data.GetNamespaces(), previewData.GetGameObject());
+                component = ComponentGetter.GetFromAssemblies(value, element.module.data.GetNamespaces(), element.data.GetGameObject());
                 if (component == null)
                     throw new SetAttributeException(name, value, this.name, value + " is not found. Ensure you wrote it correct or added \"using namespace\" element to the xml module.");
             }
             else if (component != null)
-                PropertySetter.SetValue(component, name, value, PropertySetter.Data.Create(previewData, module.data));
+                PropertySetter.SetValue(component, name, value, PropertySetter.Data.Create(element.data, element.module.data));
             else
                 throw new SetAttributeException(name, value, this.name, "Set name attribute first.");
         }
 
         public override IXMLElement AddElement(string name)
         {
-            module.app.Log("component element doesn't support nested elements.");
+            element.module.app.Log("component element doesn't support nested elements.");
             return new FakeElement(name);
         }
 
         public override void SetValue(string value)
         {
-            module.app.Log("component element doesn't support values.");
+            element.module.app.Log("component element doesn't support values.");
         }
     }
 }

@@ -11,19 +11,17 @@ namespace UnityUIBuilder.Standard.States
         where TElementData : IGameObjectData, IControllerData, ICloneData<TElementData>
         where TModuleData : IIDData
     {
-        XMLElementUI<TAppData, TModuleData, TElementData> element;
-        GameObject id = null;
+        GameObject idObject = null;
 
-        public ControllerState(XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
-            :this("controller", previewElement)
+        public ControllerState(XMLElementUI<TAppData, TModuleData, TElementData> element)
+            :this("controller", element)
         {
         }
 
-        public ControllerState(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
-            :base(name, previewElement.module)
-        {
+        public ControllerState(string name, XMLElementUI<TAppData, TModuleData, TElementData> element)
             // creating new element with clone preview element data to keep preview controller unaltered
-            element = new XMLElementUI<TAppData, TModuleData, TElementData>(previewElement.name, previewElement.data.Clone(), module);
+            : base(name, new XMLElementUI<TAppData, TModuleData, TElementData>(element.name, element.data.Clone(), element.module))
+        {
         }
 
         public override void AddAttribute(string name, string value)
@@ -32,8 +30,8 @@ namespace UnityUIBuilder.Standard.States
             {
                 case "name":
                     MonoBehaviour controller = null;
-                    if (id != null)
-                        controller = id.GetComponent<MonoBehaviour>();
+                    if (idObject != null)
+                        controller = idObject.GetComponent<MonoBehaviour>();
                     else
                         controller = element.data.GetGameObject().GetComponentsInParent<MonoBehaviour>(true)
                             .FirstOrDefault(b => b.GetType().Name == value);
@@ -46,7 +44,7 @@ namespace UnityUIBuilder.Standard.States
                     break;
                 case "id":
                     try {
-                        id = module.data.GetObjectByID(value);
+                        idObject = element.module.data.GetObjectByID(value);
                     }
                     catch
                     {
@@ -59,12 +57,12 @@ namespace UnityUIBuilder.Standard.States
         public override IXMLElement AddElement(string name)
         {
             if (element.data.GetController() == null) throw new AddElementException(name, this.name, "Please, add aatribute name to the controller before you will able add child elements.");
-            return module.HandleElement(name, element);
+            return element.AddElement(name);
         }
 
         public override void SetValue(string value)
         {
-            module.app.Log("controller element doesn't support a value");
+            element.module.app.Log("controller element doesn't support a value");
         }
     }
 }

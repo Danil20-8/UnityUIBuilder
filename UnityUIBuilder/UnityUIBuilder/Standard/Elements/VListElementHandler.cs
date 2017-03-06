@@ -33,10 +33,10 @@ namespace UnityUIBuilder.Standard.Elements
             foreach (var h in hs)
             {
                 var r = h(name, previewElement);
-                if (r != null) return r;
+                if (!(r is FakeElement)) return r;
             }
 
-            throw new AddElementException(name, previewElement.name, "Ensure you added required using namespaces or folders. If you need an empty gameObject use \"void\" element.");
+            return new BombElement(name, previewElement.name);
         }
     }
 }

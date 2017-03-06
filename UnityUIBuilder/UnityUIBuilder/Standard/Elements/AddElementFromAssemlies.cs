@@ -22,10 +22,10 @@ namespace UnityUIBuilder.Standard.Elements
             {
                 GameObject go = new GameObject(name);
                 go.AddComponent(componentType);
-                return previewElement.module.AddElement(name, previewElement.data.CreateChild(go));
+                return previewElement.CreateElement(name, previewElement.data.CreateChild(go));
             }
 
-            return null;
+            return new BombElement(name, previewElement.name);
         }
     }
 }

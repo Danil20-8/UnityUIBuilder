@@ -10,9 +10,7 @@ namespace UnityUIBuilder
     {
         public readonly TModuleData data;
         public readonly XMLApplication<TAppData, TModuleData, TElementData> app;
-        readonly XMLElementUI<TAppData, TModuleData, TElementData> rootElement;
-
-        readonly Internal _in;
+        public readonly XMLElementUI<TAppData, TModuleData, TElementData> rootElement;
 
         public XMLModule(XMLApplication<TAppData, TModuleData, TElementData> app, TElementData rootData)
             :this(app, rootData, Activator.CreateInstance<TModuleData>())
@@ -22,18 +20,12 @@ namespace UnityUIBuilder
         {
             this.app = app;
             this.data = data;
-            _in = new Internal(this);
-            this.rootElement = new XMLElementUI<TAppData, TModuleData, TElementData>("root", rootData, _in);
+            this.rootElement = new XMLElementUI<TAppData, TModuleData, TElementData>("root", rootData, this);
         }
 
         IXMLElement IXMLModule.AddElement(string name)
         {
-            return _in.HandleElement(name);
-        }
-
-        IXMLElement AddElement(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
-        {
-            return _in.HandleElement(name, previewElement);
+            return app.rootAddElementHandler.AddElement(name, rootElement);
         }
 
         public void Perform(IEnumerable<char> source)
@@ -59,37 +51,6 @@ namespace UnityUIBuilder
             {
                 this.module = module;
             }
-
-            public IXMLElement AddElement(string name, TElementData elementData)
-            {
-                return new XMLElementUI<TAppData, TModuleData, TElementData>(name, elementData, module._in);
-            }
-
-            public Internal GetInternal()
-            {
-                return module._in;
-            }
-        }
-
-        /// <summary>
-        /// Don't use this in IAddElementHandler. Methods of class will bring you to stack overflow exception.
-        /// </summary>
-        public class Internal: External
-        {
-            public XMLElementUI<TAppData, TModuleData, TElementData> rootElement { get { return module.rootElement; } }
-
-            public Internal(XMLModule<TAppData, TModuleData, TElementData> module) : base(module) { }
-
-            public IXMLElement HandleElement(string name)
-            {
-                return app.rootAddElementHandler.AddElement(name, module.rootElement);
-            }
-
-            public IXMLElement HandleElement(string name, XMLElementUI<TAppData, TModuleData, TElementData> previewElement)
-            {
-                return app.addElementHandler.AddElement(name, previewElement);
-            }
-
         }
     }
 
