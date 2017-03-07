@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MyLib.Parsing.XML;
+using DRLib.Parsing.XML;
 using System.Reflection;
 using UnityEngine;
-using MyLib.Algoriphms;
+using DRLib.Algoriphms;
 namespace UnityUIBuilder.Standard.Elements
 {
     public class AddElementFromAssemblies<TAppData, TModuleData, TElementData> : VElementHandler<TAppData, TModuleData, TElementData>

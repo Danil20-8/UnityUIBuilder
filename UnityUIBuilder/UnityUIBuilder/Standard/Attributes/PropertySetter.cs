@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using MyLib.Algoriphms;
+using DRLib.Algoriphms;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,7 +24,7 @@ namespace UnityUIBuilder.Standard.Attributes
             where TData : IControllerData, IGameObjectData, IResFoldersData, IIDData
         {
             if (SetString(p, obj, value)) return true;
-            if (SetNumeric(p, obj, value)) return true;
+            if (SetParseable(p, obj, value)) return true;
             if (SetEnum(p, obj, value)) return true;
             if (SetColor(p, obj, value)) return true;
             if (SetVector(p, obj, value)) return true;
@@ -45,16 +45,16 @@ namespace UnityUIBuilder.Standard.Attributes
             }
             return false;
         }
-        public static bool SetNumeric(PropertyInfo p, object obj, string value)
+        static readonly Type[] stringParams = new Type[] { typeof(string) };
+        public static bool SetParseable(PropertyInfo p, object obj, string value)
         {
-            var ptype = p.PropertyType;
-            if (ptype == typeof(int))
-                p.SetValue(obj, int.Parse(value), null);
-            else if (ptype == typeof(float))
-                p.SetValue(obj, float.Parse(value), null);
-            else
-                return false;
-            return true;
+            var m = p.PropertyType.GetMethod("Parse", stringParams);
+            if(m != null && m.ReturnType == p.PropertyType)
+            {
+                p.SetValue(obj, m.Invoke(null, new object[] { value }), null);
+                return true;
+            }
+            return false;
         }
         public static bool SetEnum(PropertyInfo p, object obj, string value)
         {

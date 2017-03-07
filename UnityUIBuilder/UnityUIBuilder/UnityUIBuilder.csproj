@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MyLib">
-      <HintPath>..\..\..\MyLib\MyLib\MyLib\bin\Debug\MyLib.dll</HintPath>
+    <Reference Include="DRLib">
+      <HintPath>..\..\..\MyLib\MyLib\MyLib\bin\Release\DRLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -80,7 +80,6 @@
     <Compile Include="Standard\States\IncludeState.cs" />
     <Compile Include="Standard\ModuleData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UIBuilder.cs" />
     <Compile Include="Standard\States\UsingState.cs" />
     <Compile Include="XMLApplication.cs" />
     <Compile Include="XMLElementUI.cs" />
