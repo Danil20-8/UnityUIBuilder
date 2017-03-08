@@ -25,30 +25,30 @@ namespace UnityUIBuilder.Standard.Attributes
         public const string call_st = "call";
 
         [Version(typeof(std_1_0))]
-        new public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element)
+        new public AddResult AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModelData, TElementData> element)
         {
             switch(attributeName)
             {
                 case class_st:
                     foreach (var a in element.module.data.GetClassAttributes(attributeValue))
                         element.AddAttribute(a.name, a.value);
-                    return true;
+                    return AddResult.State.OK;
                 case id_st:
                     try {
                         element.module.data.AddIDObject(attributeValue, element.data.GetGameObject());
                     }
-                    catch(Exception e) { throw new SetAttributeException(attributeName, attributeValue, element.name, e); }
-                    return true;
+                    catch(Exception e) { return new AddResult(AddResult.State.Error) { message = e.Message }; }
+                    return AddResult.State.OK;
                 case call_st:
                     var controller = element.data.GetController();
                     var gameObject = element.data.GetGameObject();
 
                     var m = controller.GetType().GetMethod(attributeValue, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new Type[] { typeof(GameObject) }, null);
                     if (m != null) m.Invoke(controller, new object[] { gameObject });
-                    else throw new SetAttributeException(attributeName, attributeValue, element.name, controller + " has no method " + attributeValue + "(GameObject sender).");
-                    return true;
+                    else return new AddResult(AddResult.State.Error) { message = controller + " has no method " + attributeValue + "(GameObject sender)." };
+                    return AddResult.State.OK;
                 default:
-                    return false;
+                    return AddResult.State.Ignored;
             }
         }
     }

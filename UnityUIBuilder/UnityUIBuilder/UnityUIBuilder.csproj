@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Standard\StandartHandlers.cs" />
     <Compile Include="Standard\AppData.cs" />
     <Compile Include="Standard\AppDataInterfaces.cs" />
     <Compile Include="Standard\Attributes\AttributesForUI.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Standard\Constants.cs" />
     <Compile Include="Standard\ElementData.cs" />
     <Compile Include="Standard\ElementDataInterfacies.cs" />
+    <Compile Include="Standard\Elements\AddElementCase.cs" />
     <Compile Include="Standard\Elements\AddElementFromAssemlies.cs" />
     <Compile Include="Standard\Elements\AddRootStateHandler.cs" />
     <Compile Include="Standard\Elements\VElementHandler.cs" />

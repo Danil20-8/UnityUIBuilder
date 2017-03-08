@@ -26,7 +26,7 @@ namespace UnityUIBuilder.Standard.Elements
                 case "define":
                     return new DefineState<TAppData, TModuleData, TElementData>(previewElement);
                 default:
-                    return previewElement.AddElement(name);
+                    return new BombElement(name, previewElement.name);
             }
         }
     }

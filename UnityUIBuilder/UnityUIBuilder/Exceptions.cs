@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace UnityUIBuilder
 {
@@ -9,56 +6,56 @@ namespace UnityUIBuilder
     {
 
         public SetAttributeException(string attributeName, string value, string elementName)
-            :base(MakeString(attributeName, value, elementName))
+            :base(MakeString(attributeName, value, elementName, string.Empty))
         {
         }
 
         public SetAttributeException(string attributeName, string value, string elementName, string message)
-            : base(MakeString(attributeName, value, elementName) + ". " + message)
+            : base(MakeString(attributeName, value, elementName, message))
         {
         }
 
         public SetAttributeException(string attributeName, string value, string elementName, Exception innerException)
-            :base(MakeString(attributeName, value, elementName), innerException)
+            :base(MakeString(attributeName, value, elementName, string.Empty), innerException)
         {
         }
 
         public SetAttributeException(string attributeName, string value, string elementName, string message, Exception innerException)
-            : base(MakeString(attributeName, value, elementName) + ". " + message, innerException)
+            : base(MakeString(attributeName, value, elementName, message), innerException)
         {
         }
 
-        static string MakeString(string attributeName, string value, string elementName)
+        static string MakeString(string attributeName, string value, string elementName, string message)
         {
-            return "Cannot set to " + attributeName + " attribute with value " + value + " in " + elementName + " element.";
+            return string.Format("Cannot set {0} attribute with value {1} in {2} element.", attributeName, value, elementName) + (message != string.Empty ? " " + message + "." : message);
         }
     }
 
     public class AddElementException : Exception
     {
         public AddElementException(string elementName, string parentElemenentName)
-            :base(MakeString(elementName, parentElemenentName))
+            :base(MakeString(elementName, parentElemenentName, string.Empty))
         {
         }
 
         public AddElementException(string elementName, string parentElemenentName, Exception innerException)
-            : base(MakeString(elementName, parentElemenentName), innerException)
+            : base(MakeString(elementName, parentElemenentName, string.Empty), innerException)
         {
         }
 
         public AddElementException(string elementName, string parentElemenentName, string message)
-            : base(MakeString(elementName, parentElemenentName) + " " + message + ".")
+            : base(MakeString(elementName, parentElemenentName, message))
         {
         }
 
         public AddElementException(string elementName, string parentElemenentName, string message, Exception innerException)
-            : base(MakeString(elementName, parentElemenentName) + " " + message + ".", innerException)
+            : base(MakeString(elementName, parentElemenentName, message), innerException)
         {
         }
 
-        static string MakeString(string elementName, string parentElementName)
+        static string MakeString(string elementName, string parentElementName, string message)
         {
-            return "Cannot add " + elementName + " to " + parentElementName + ".";
+            return string.Format("Cannot add {0} to {1}.", elementName, parentElementName) + (message != string.Empty ? " " + message + "." : message);
         }
     }
 

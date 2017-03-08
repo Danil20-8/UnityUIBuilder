@@ -25,7 +25,7 @@ namespace UnityUIBuilder
 
         IXMLElement IXMLModule.AddElement(string name)
         {
-            return app.rootAddElementHandler.AddElement(name, rootElement);
+            return app.AddElementTo(name, rootElement);
         }
 
         public void Perform(IEnumerable<char> source)
@@ -37,19 +37,6 @@ namespace UnityUIBuilder
             catch(EndOfSequenceParseException e)
             {
                 throw new XMLParseException("XML Module parse exception: syntax error.", e);
-            }
-        }
-
-        public class External
-        {
-            protected XMLModule<TAppData, TModuleData, TElementData> module;
-
-            public XMLApplication<TAppData, TModuleData, TElementData> app { get { return module.app; } }
-            public TModuleData data { get { return module.data; } }
-
-            public External(XMLModule<TAppData, TModuleData, TElementData> module)
-            {
-                this.module = module;
             }
         }
     }

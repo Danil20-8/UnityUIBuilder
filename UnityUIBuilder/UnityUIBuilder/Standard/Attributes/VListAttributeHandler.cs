@@ -18,7 +18,7 @@ namespace UnityUIBuilder.Standard.Attributes
             this.handlers = handlers;
         }
 
-        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element)
+        public AddResult AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element)
         {
             string version = element.module.data.GetVersion();
             VAttributeHandler<TAppData, TModuleData, TElementData>.AddAttributeDelegate[] hs;
@@ -29,10 +29,14 @@ namespace UnityUIBuilder.Standard.Attributes
                     throw new VersionException(this, version);
                 versions.Add(version, hs);
             }
-            foreach (var h in hs)
-                if (h(attributeName, attributeValue, element)) return true;
 
-            return false;
+            AddResult r = AddResult.State.Ignored;
+            foreach (var h in hs)
+            {
+                r |= h(attributeName, attributeValue, element);
+                if (!r.ignored) return r;
+            }
+            return r;
         }
     }
 }

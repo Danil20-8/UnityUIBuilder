@@ -44,23 +44,31 @@ namespace UnityUIBuilder
     /// </summary>
     public class BombElement : FakeElement
     {
-
-        string message { get { return _message != null ? message : "Ensure you added required using namespaces or folders. If you need an empty gameObject use \"void\" element."; } }
-        string _message;
+        public string message { get { return _message; } set { _message = value; } }
+        string _message = string.Empty;
 
         string parentName;
 
-        public BombElement(string name, string parentName, string message = null) : base(name) { this.parentName = parentName; _message = message; }
+        public BombElement(string name, string parentName) : base(name)
+        {
+            this.parentName = parentName;
+        }
 
         public override IXMLElement AddElement(string notUsedName)
         {
-            throw new AddElementException(this.name, parentName, message);
+            Detonate();
+            return null; // just for compile. It never comes here.
         }
         public override void AddAttribute(string notUsedName, string notUsedValue)
         {
-            throw new AddElementException(this.name, parentName, message);
+            Detonate();
         }
         public override void SetValue(string value)
+        {
+            Detonate();
+        }
+
+        public void Detonate()
         {
             throw new AddElementException(this.name, parentName, message);
         }

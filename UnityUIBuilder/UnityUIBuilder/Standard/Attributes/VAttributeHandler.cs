@@ -10,7 +10,7 @@ namespace UnityUIBuilder.Standard.Attributes
         where TModuleData : IModuleVersionData
     {
 
-        public delegate bool AddAttributeDelegate(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element);
+        public delegate AddResult AddAttributeDelegate(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element);
 
         public readonly string libName;
         List<Version> versions = new List<Version>();
@@ -27,7 +27,7 @@ namespace UnityUIBuilder.Standard.Attributes
             versions.Sort();
         }
 
-        public bool AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element)
+        public AddResult AddAttribute(string attributeName, string attributeValue, XMLElementUI<TAppData, TModuleData, TElementData> element)
         {
             var m = GetMethod(element.module.data.GetVersion());
             if (m != null)

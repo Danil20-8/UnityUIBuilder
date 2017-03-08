@@ -7,6 +7,7 @@ namespace UnityUIBuilder
         public readonly XMLModule<TAppData, TModuleData, TElementData> module;
         public readonly TElementData data;
 
+        public bool isRoot { get { return module.rootElement == this; } }
 
         public string name { get; private set; }
 
@@ -19,7 +20,7 @@ namespace UnityUIBuilder
 
         public IXMLElement AddElement(string name)
         {
-            return module.app.addElementHandler.AddElement(name, this);
+            return module.app.AddElementTo(name, this);
         }
 
         public IXMLElement CreateElement(string name, TElementData data)
@@ -29,7 +30,7 @@ namespace UnityUIBuilder
 
         public void AddAttribute(string name, string value)
         {
-            module.app.addAttributeHandler.AddAttribute(name, value, this);
+            module.app.SetAttributeTo(name, value, this);
         }
 
         void IXMLElement.SetValue(string value)

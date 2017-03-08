@@ -12,46 +12,46 @@ namespace UnityUIBuilder.Standard.Attributes
         where TElementData : IGameObjectData
     {
         [Version(typeof(std_1_0))]
-        new public bool AddAttribute(string attributeName, string value, XMLElementUI<TAppData, TModuleData, TElementData> element)
+        new public AddResult AddAttribute(string attributeName, string value, XMLElementUI<TAppData, TModuleData, TElementData> element)
         {
             var rt = element.data.GetGameObject().GetComponent<RectTransform>();
             if (rt == null)
-                return false;
+                return AddResult.State.Ignored;
             try
             {
                 switch (attributeName)
                 {
                     case "left":
                         Left(rt, value);
-                        return true;
+                        return AddResult.State.OK;
                     case "right":
                         Right(rt, value);
-                        return true;
+                        return AddResult.State.OK;
                     case "bottom":
                         Bottom(rt, value);
-                        return true;
+                        return AddResult.State.OK;
                     case "top":
                         Top(rt, value);
-                        return true;
+                        return AddResult.State.OK;
                     case "width":
                         Width(rt, value);
-                        return true;
+                        return AddResult.State.OK;
                     case "height":
                         Height(rt, value);
-                        return true;
+                        return AddResult.State.OK;
                     case "side":
                         Side(rt, value);
-                        return true;
+                        return AddResult.State.OK;
                     case "anchor":
                         Anchor(rt, value);
-                        return true;
+                        return AddResult.State.OK;
                 }
             }
             catch(Exception e)
             {
-                throw new SetAttributeException(attributeName, value, element.name, e);
+                return  new AddResult(AddResult.State.Error) { message = e.Message };
             }
-            return false;
+            return AddResult.State.Ignored;
         }
 
 
